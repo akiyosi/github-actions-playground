@@ -131,6 +131,6 @@ jobs:
           ls -l /home/runner/work/test-github-actions/test-github-actions/macos-build/*
           echo "-----"
           cd /home/runner/work/test-github-actions/test-github-actions/
-          gh release create $TAG_NAME $PRERELEASE --title "$SUBJECT" --target /home/runner/work/test-github-actions/test-github-actions/macos-build/* /home/runner/work/test-github-actions/test-github-actions/linux-build/*
+          gh release create $TAG_NAME $PRERELEASE --title "$SUBJECT" --target $GITHUB_SHA /home/runner/work/test-github-actions/test-github-actions/macos-build/* /home/runner/work/test-github-actions/test-github-actions/linux-build/*
 
 
