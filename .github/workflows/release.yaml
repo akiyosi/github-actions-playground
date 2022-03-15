@@ -123,6 +123,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          ls -l
           gh release create $TAG_NAME $PRERELEASE --title "$SUBJECT" --target $GITHUB_SHA macos/* linux/*
 
 
