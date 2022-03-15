@@ -1,0 +1,159 @@
+name: Release
+on:
+  schedule:
+    - cron: '0 2 * * *' # run at 2 AM UTC
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name for release'
+        required: false
+        default: nightly
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+
+jobs:
+  linux:
+    strategy:
+      matrix:
+        go-version: [1.16.x]
+        platform: [ubuntu-latest] #, windows-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+
+    - name: Install Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - uses: actions/checkout@v2
+
+    - name: Build
+      run: |
+        ls -l
+        go build main.go
+        mkdir linux
+        mv main linux/
+
+    - name: Archive
+      run: |
+        tar -jcvf linux.tar.bz2 linux
+
+    - name: Upload for linux
+      uses: actions/upload-artifact@v1
+      with:
+        name: linux-build
+        path: linux.tar.bz2
+
+  macos:
+    strategy:
+      matrix:
+        go-version: [1.16.x]
+        platform: [macos-10.15]
+    runs-on: ${{ matrix.platform }}
+    steps:
+
+    - name: Install Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Retrieve version
+      id: version-macos
+      run: |
+        echo "::set-output name=VERSION::$(git describe --tags)"
+        echo "::set-output name=VERSION_HASH::$(git rev-parse HEAD)"
+
+    - name: Build
+      run: |
+        echo ${{ steps.version-macos.outputs.VERSION }}
+        ls -l
+        go build main.go
+        mkdir macos
+        mv main macos/
+
+    - if: github.event_name == 'workflow_dispatch'
+      run: echo "ARCHIVE_NAME=test-nightly" >> $GITHUB_ENV
+    - if: github.event_name == 'schedule'
+      run: echo "ARCHIVE_NAME=test-nightly" >> $GITHUB_ENV
+    - if: github.event_name == 'push'
+      run: echo "ARCHIVE_NAME=test-${{ steps.version-macos.outputs.VERSION }}" >> $GITHUB_ENV
+
+    - name: arcihve name test
+      run: |
+        touch testfile
+        ls -l
+        mv macos "$ARCHIVE_NAME"
+        ls -l
+
+    - name: Archive
+      run: |
+        tar -jcvf "$ARCHIVE_NAME".tar.bz2 "$ARCHIVE_NAME"
+
+    - name: Upload for macos
+      uses: actions/upload-artifact@v1
+      with:
+        name: macos-build
+        path: ${{ env.ARCHIVE_NAME }}.tar.bz2
+
+  publish:
+    needs: [linux, macos]
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gettext-base
+
+      - if: github.event_name == 'workflow_dispatch'
+        run: echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
+      - if: github.event_name == 'schedule'
+        run: echo 'TAG_NAME=nightly' >> $GITHUB_ENV
+      - if: github.event_name == 'push'
+        run: |
+          TAG_NAME=${{ github.ref }}
+          echo "TAG_NAME=${TAG_NAME#refs/tags/}" >> $GITHUB_ENV
+
+
+      - if: env.TAG_NAME == 'nightly'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          (echo 'SUBJECT=Nightly build';
+           echo 'PRERELEASE=--prerelease') >> $GITHUB_ENV
+          gh release delete nightly --yes || true
+          git push origin :nightly || true
+
+      - if: env.TAG_NAME != 'nightly'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          (echo "SUBJECT=TEST APP $TAG_NAME";
+           echo 'PRERELEASE=') >> $GITHUB_ENV
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ls -l /home/runner/work/test-github-actions/test-github-actions/linux-build
+          ls -l /home/runner/work/test-github-actions/test-github-actions/macos-build
+          echo "-----"
+          ls -l /home/runner/work/test-github-actions/test-github-actions/linux-build/*
+          echo "-----"
+          ls -l /home/runner/work/test-github-actions/test-github-actions/macos-build/*
+          echo "-----"
+          cd /home/runner/work/test-github-actions/test-github-actions/
+          gh release create $TAG_NAME $PRERELEASE --title "$SUBJECT" --target $GITHUB_SHA /home/runner/work/test-github-actions/test-github-actions/macos-build/* /home/runner/work/test-github-actions/test-github-actions/linux-build/*
+
+
