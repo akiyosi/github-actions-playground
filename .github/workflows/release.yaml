@@ -43,7 +43,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: linux-build
-        path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/linux.tar.bz2
+        path: linux.tar.bz2
 
   macos:
     strategy:
@@ -75,7 +75,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: macos-build
-        path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/macos.tar.bz2
+        path: macos.tar.bz2
 
   publish:
     needs: [linux, macOS]
