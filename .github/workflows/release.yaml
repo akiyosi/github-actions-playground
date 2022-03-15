@@ -1,0 +1,123 @@
+name: Release
+
+on: 
+  schedule: '0 2 * * *' # run at 2 AM UTC
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name for release'
+        required: false
+        default: nightly
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+
+jobs:
+  linux:
+    strategy:
+      matrix:
+        go-version: [1.16.x]
+        platform: [ubuntu-latest] #, windows-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+
+    - name: Install Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: ${{ matrix.go-version }}
+    - name: Build
+      run: |
+        go build
+        mkdir linux
+        mv main linux/
+
+    - name: Archive
+      run: |
+        tar -jcvf linux.tar.bz2 linux
+
+    - name: Upload for linux
+      if: ${{ matrix.qtversion == '5.14.1' }}
+      uses: actions/upload-artifact@v1
+      with:
+        name: Goneovim-latest-linux
+        path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/linux.tar.bz2
+
+  macos:
+    strategy:
+      matrix:
+        go-version: [1.16.x]
+        platform: [macos-10.15]
+    runs-on: ${{ matrix.platform }}
+    steps:
+
+    - name: Install Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Build
+      run: |
+        go build
+        mkdir macos
+        mv main macos/
+
+    - name: Archive
+      run: |
+        tar -jcvf macos.tar.bz2 macos
+
+    - name: Upload for macos
+      uses: actions/upload-artifact@v1
+      with:
+        name: macos
+        path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/macos.tar.bz2
+
+  publish:
+    needs: [linux, macOS]
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gettext-base
+
+      - if: github.event_name == 'workflow_dispatch'
+        run: echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
+      - if: github.event_name == 'schedule'
+        run: echo 'TAG_NAME=nightly' >> $GITHUB_ENV
+      - if: github.event_name == 'push'
+        run: |
+          TAG_NAME=${{ github.ref }}
+          echo "TAG_NAME=${TAG_NAME#refs/tags/}" >> $GITHUB_ENV
+
+
+      - if: env.TAG_NAME == 'nightly'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          (echo 'SUBJECT=Nightly build';
+           echo 'PRERELEASE=--prerelease') >> $GITHUB_ENV
+          gh release delete nightly --yes || true
+          git push origin :nightly || true
+
+      - if: env.TAG_NAME != 'nightly'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          (echo 'SUBJECT=Release build';
+           echo 'PRERELEASE=') >> $GITHUB_ENV
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create $TAG_NAME $PRERELEASE --title "$SUBJECT" --target $GITHUB_SHA macos/* linux/*
+
+
+
