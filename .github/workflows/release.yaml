@@ -27,6 +27,7 @@ jobs:
         go-version: ${{ matrix.go-version }}
     - name: Build
       run: |
+        ls -l
         go build main.go
         mkdir linux
         mv main linux/
@@ -57,6 +58,7 @@ jobs:
 
     - name: Build
       run: |
+        ls -l
         go build main.go
         mkdir macos
         mv main macos/
