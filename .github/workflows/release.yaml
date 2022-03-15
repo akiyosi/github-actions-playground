@@ -125,8 +125,8 @@ jobs:
         run: |
           ls -l .
           tree
-          ls -l ./linux_build
-          ls -l ./macos_build
+          ls -l ./linux_build/linux.tar.bz2
+          ls -l ./macos_build/macos.tar.bz2
           gh release create $TAG_NAME $PRERELEASE --title "$SUBJECT" --target $GITHUB_SHA macos_build/* linux_build/*
 
 
