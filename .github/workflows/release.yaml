@@ -116,7 +116,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          (echo 'SUBJECT=TEST APP $TAG_NAME';
+          (echo "SUBJECT=TEST APP $TAG_NAME";
            echo 'PRERELEASE=') >> $GITHUB_ENV
 
       - name: Publish
