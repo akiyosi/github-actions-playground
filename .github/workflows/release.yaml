@@ -123,10 +123,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd /home/runner/work/test-github-actions/test-github-actions/
+          ls -l /home/runner/work/test-github-actions/test-github-actions/linux-build
+          ls -l /home/runner/work/test-github-actions/test-github-actions/macos-build
           ls -l /home/runner/work/test-github-actions/test-github-actions/linux_build/linux.tar.bz2
           ls -l /home/runner/work/test-github-actions/test-github-actions/macos_build/macos.tar.bz2
-          gh release create $TAG_NAME $PRERELEASE --title "$SUBJECT" --target $GITHUB_SHA /home/runner/work/test-github-actions/test-github-actions/linux_build/linux.tar.bz2 /home/runner/work/test-github-actions/test-github-actions/linux_build/macos.tar.bz2
+          cd /home/runner/work/test-github-actions/test-github-actions/
+          gh release create $TAG_NAME $PRERELEASE --title "$SUBJECT" --target $GITHUB_SHA macos_build/* linux_build/*
 
 
 
