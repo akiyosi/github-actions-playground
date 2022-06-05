@@ -59,6 +59,14 @@ jobs:
         go-version: ${{ matrix.go-version }}
 
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Retrieve version
+      id: version-macos
+      run: |
+        echo "::set-output name=VERSION::$(git describe --tags)"
+        echo "::set-output name=VERSION_HASH::$(git rev-parse HEAD)"
 
     - name: Build
       run: |
