@@ -76,6 +76,20 @@ jobs:
         mkdir macos
         mv main macos/
 
+    - if: github.event_name == 'workflow_dispatch'
+      run: echo "ARCHIVE_NAME=test-nightly" >> $GITHUB_ENV
+    - if: github.event_name == 'schedule'
+      run: echo "ARCHIVE_NAME=test-nightly" >> $GITHUB_ENV
+    - if: github.event_name == 'push'
+      run: echo "ARCHIVE_NAME=test-${{ steps.version-macos.outputs.VERSION }}" >> $GITHUB_ENV
+
+    - name: arcihve name test
+      run: |
+        touch testfile
+        ls -l
+        mv testfile "$ARCHIVE_NAME"
+        ls -l
+
     - name: Archive
       run: |
         tar -jcvf macos.tar.bz2 macos
