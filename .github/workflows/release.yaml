@@ -87,7 +87,7 @@ jobs:
       run: |
         touch testfile
         ls -l
-        mv testfile "$ARCHIVE_NAME"
+        mv testfile "$ARCHIVE_NAME".txt
         ls -l
 
     - name: Archive
