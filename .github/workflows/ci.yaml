@@ -53,12 +53,13 @@ jobs:
       QT_DIR: ${{ github.workspace }}\Qt
       QT_MSYS2: true
       QT_MSYS2_DIR: D:\a\_temp\msys64\
+      QT_MSYS2_STATIC: true
       QT_MSVC: false
       QT_DEBUG: false
       GO111MODULE: off
       # CGO_CFLAGS_ALLOW: ".*" 
       # CGO_CXXFLAGS_ALLOW: ".*" 
-      # CGO_LDFLAGS_ALLOW: ".*" 
+      CGO_LDFLAGS_ALLOW: ".*" 
       #CGO_ENABLED: 1
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:

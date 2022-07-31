@@ -8,7 +8,7 @@ env:
   qt_arch:   "win64_mingw81"
   
 jobs:
-  QtOnlineBuild:
+  build-qt-windows:
     runs-on: windows-latest
     steps:
     
