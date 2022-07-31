@@ -80,7 +80,7 @@ jobs:
     - name: check
       shell: msys2 {0}
       run: |
-        pacman -Qpe
+        pacman -Q
 
 
     - name: Install Go
