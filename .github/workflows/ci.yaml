@@ -120,6 +120,10 @@ jobs:
       run: |
         go get -v -d github.com/akiyosi/goneovim/...
 
+    - name: Clear Go build caches
+      run: |
+        ${{ github.workspace }}\go-root\bin\go.exe clean -cache
+
     # - name: Build
     #   run: |
     #     cd ${{ github.workspace }}\src\github.com\akiyosi\goneovim\cmd\goneovim

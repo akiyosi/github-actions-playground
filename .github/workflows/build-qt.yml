@@ -60,7 +60,7 @@ jobs:
       shell: cmd
       run: |
         dir .
-        dir C:\Qt5_binaries\
+        dir D:\Qt5_binaries\
 
     - name: Release
       env:
