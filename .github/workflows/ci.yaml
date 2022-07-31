@@ -75,12 +75,6 @@ jobs:
       run: |
         pacman --noconfirm -S sed git mingw-w64-x86_64-qt-creator mingw-w64-x86_64-qt5-static
         pacman -Scc
-
-    - name: Remove unnecessary packages
-      shell: msys2 {0}
-      run: |
-        pacman --noconfirm -Rs bash-completion mingw-w64-x86_64-gdb-multiarch mintty nano wget
-        pacman -Scc
         pacman -Sc
 
     - name: Install Go
