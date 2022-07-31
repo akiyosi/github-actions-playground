@@ -73,17 +73,16 @@ jobs:
         install: mingw-w64-x86_64-toolchain
     - shell: msys2 {0}
       run: |
-        pacman --noconfirm -S sed git mingw-w64-x86_64-qt-creator mingw-w64-x86_64-qt5-static
+        pacman --noconfirm -S sed git mingw-w64-x86_64-qt5-static
         pacman -Scc
 
-    - name: Remove unnecessary packages
-      shell: msys2 {0}
-      run: |
-        pacman --noconfirm -Rs mingw-w64-x86_64-qt6-5compat mingw-w64-x86_64-qt6-base mingw-w64-x86_64-qt6-declarative mingw-w64-x86_64-qt6-quick3d mingw-w64-x86_64-qt6-serialport mingw-w64-x86_64-qt6-shadertools mingw-w64-x86_64-qt6-svg mingw-w64-x86_64-qt6-tools mingw-w64-x86_64-qt6-translations
-        pacman -Scc
-        pacman -Sc
-        pacman -Q
-
+    # - name: Remove unnecessary packages
+    #   shell: msys2 {0}
+    #   run: |
+    #     pacman --noconfirm -Rs mingw-w64-x86_64-qt6-5compat mingw-w64-x86_64-qt6-base mingw-w64-x86_64-qt6-declarative mingw-w64-x86_64-qt6-quick3d mingw-w64-x86_64-qt6-serialport mingw-w64-x86_64-qt6-shadertools mingw-w64-x86_64-qt6-svg mingw-w64-x86_64-qt6-tools mingw-w64-x86_64-qt6-translations
+    #     pacman -Scc
+    #     pacman -Sc
+    #     pacman -Q
 
     - name: Install Go
       continue-on-error: true
