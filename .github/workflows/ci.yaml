@@ -72,7 +72,7 @@ jobs:
         install: mingw-w64-x86_64-toolchain
     - shell: msys2 {0}
       run: |
-        pacman --noconfirm -S sed git mingw-w64-x86_64-toolchain mingw-w64-x86_64-qt5
+        pacman --noconfirm -S sed git mingw-w64-x86_64-toolchain mingw-w64-x86_64-qt5-static
 
     - name: Install Go
       continue-on-error: true
