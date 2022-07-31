@@ -111,7 +111,7 @@ jobs:
         QT_API: 5.13.0
       shell: msys2 {0}
       run: |
-        /d/a/test-github-actions/test-github-actions/bin/qtsetup -test=false
+        /d/a/github-actions-playground/github-actions-playground/bin/qtsetup -test=false
 
     - name: Get dependencies
       continue-on-error: true
@@ -133,9 +133,9 @@ jobs:
         QT_API: 5.13.0
       shell: msys2 {0}
       run: |
-        cd /d/a/test-github-actions/test-github-actions/src/github.com/akiyosi/goneovim/cmd/goneovim
-        /d/a/test-github-actions/test-github-actions/bin/qtmoc
-        /d/a/test-github-actions/test-github-actions/bin/qtdeploy build desktop
+        cd /d/a/github-actions-playground/github-actions-playground/src/github.com/akiyosi/goneovim/cmd/goneovim
+        /d/a/github-actions-playground/github-actions-playground/bin/qtmoc
+        /d/a/github-actions-playground/github-actions-playground/bin/qtdeploy build desktop
 
     # - name: Test
     #   env:
