@@ -50,7 +50,7 @@ jobs:
       GOPATH: ${{ github.workspace }}
       GOROOT: ${{ github.workspace }}\go-root
       QT_VERSION: ${{ matrix.qtversion }}
-      QT_DIR: ${{ github.workspace }}\Qt
+      # QT_DIR: ${{ github.workspace }}\Qt
       QT_MSYS2: true
       QT_MSYS2_DIR: D:\a\_temp\msys64\
       QT_MSYS2_STATIC: true
@@ -72,7 +72,7 @@ jobs:
         install: mingw-w64-x86_64-toolchain
     - shell: msys2 {0}
       run: |
-        pacman --noconfirm -S sed git mingw-w64-x86_64-toolchain mingw-w64-x86_64-qt5-static
+        pacman --noconfirm -S sed git mingw-w64-x86_64-qt-creator mingw-w64-x86_64-qt5-static
 
     - name: Install Go
       continue-on-error: true
@@ -106,10 +106,10 @@ jobs:
           !${{ github.workspace }}\src\github.com\therecipe\qt\.git
         key: ${{ matrix.qtversion }}-qtbindings-windows-${{ env.cache-version }}
 
-    - name: check
-      run: |
-        dir D:\a\_temp\msys64\
-        dir D:\a\_temp\msys64\mingw64\
+    # - name: check
+    #   run: |
+    #     dir D:\a\_temp\msys64\
+    #     dir D:\a\_temp\msys64\mingw64\
 
     - name: Generate Qt bindings
       if: ${{ steps.cache-qt-bindings-windows.outputs.cache-hit != 'true' }}
