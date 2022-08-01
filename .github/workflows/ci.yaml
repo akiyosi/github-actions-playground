@@ -65,6 +65,18 @@ jobs:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
 
+    - name: Check path
+      continue-on-error: true
+      run: |
+        dir C:\
+
+    - name: Install Go
+      continue-on-error: true
+      run: |
+        curl -sL --retry 10 --retry-delay 60 -O https://dl.google.com/go/go1.16.5.windows-amd64.zip
+        expand-archive -path go1.16.5.windows-amd64.zip -destinationpath .
+        Move-Item -Path go -Destination C:\go-root
+
     - name: Setup MSYS2 and install Qt5
       uses: msys2/setup-msys2@v2
       with:
@@ -76,13 +88,6 @@ jobs:
         pacman --noconfirm -S sed git mingw-w64-x86_64-qt-creator mingw-w64-x86_64-qt5-static
         pacman -Scc
         pacman -Sc
-
-    - name: Install Go
-      continue-on-error: true
-      run: |
-        curl -sL --retry 10 --retry-delay 60 -O https://dl.google.com/go/go1.16.5.windows-amd64.zip
-        expand-archive -path go1.16.5.windows-amd64.zip -destinationpath .
-        Move-Item -Path go -Destination go-root
 
     - name: Get Qt binding for Go
       run: |
