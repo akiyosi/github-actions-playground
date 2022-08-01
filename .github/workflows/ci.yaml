@@ -47,8 +47,8 @@ jobs:
         qtversion: [5.14.1]
     runs-on: ${{ matrix.platform }}
     env:
-      GOPATH: ${{ github.workspace }}
-      GOROOT: ${{ github.workspace }}\go-root
+      GOPATH: C:\
+      GOROOT: C:\go-root
       QT_VERSION: ${{ matrix.qtversion }}
       # QT_DIR: ${{ github.workspace }}\Qt
       QT_API: 5.13.0
@@ -71,7 +71,6 @@ jobs:
         update: true
         msystem: mingw64
         install: mingw-w64-x86_64-toolchain
-        location: C:\
     - shell: msys2 {0}
       run: |
         pacman --noconfirm -S sed git mingw-w64-x86_64-qt-creator mingw-w64-x86_64-qt5-static
@@ -87,7 +86,7 @@ jobs:
 
     - name: Get Qt binding for Go
       run: |
-        ${{ github.workspace }}\go-root\bin\go.exe get -v -tags=no_env github.com/therecipe/qt/cmd/...
+        C:\go-root\bin\go.exe get -v -tags=no_env github.com/therecipe/qt/cmd/...
 
     - name: Checkout code
       uses: actions/checkout@v2
@@ -99,15 +98,15 @@ jobs:
     # FIXME: Should be fixed with the deprecation of set-env
     - name: Set PATH
       run: |
-        $env:PATH = "C:\\msys64\\usr\\bin;${{ github.workspace }}\\bin;${{ github.workspace }}\\go-root\\bin;$env:PATH"
+        $env:PATH = "C:\\msys64\\usr\\bin;C:\\bin;C:\\go-root\\bin;$env:PATH"
         echo "::set-env name=PATH::$env:PATH"
 
     - uses: actions/cache@v2
       id: cache-qt-bindings-windows
       with:
         path: |
-          ${{ github.workspace }}\src\github.com\therecipe\qt\*
-          !${{ github.workspace }}\src\github.com\therecipe\qt\.git
+          C:\src\github.com\therecipe\qt\*
+          !C:\src\github.com\therecipe\qt\.git
         key: ${{ matrix.qtversion }}-qtbindings-windows-${{ env.cache-version }}
 
     - name: Generate Qt bindings
@@ -123,7 +122,7 @@ jobs:
 
     - name: Clear Go build caches
       run: |
-        ${{ github.workspace }}\go-root\bin\go.exe clean -cache
+        C:\go-root\bin\go.exe clean -cache
 
     # - name: Build
     #   run: |
@@ -134,9 +133,9 @@ jobs:
     - name: Build
       shell: msys2 {0}
       run: |
-        cd /d/a/github-actions-playground/github-actions-playground/src/github.com/akiyosi/goneovim/cmd/goneovim
-        /d/a/github-actions-playground/github-actions-playground/bin/qtmoc
-        /d/a/github-actions-playground/github-actions-playground/bin/qtdeploy build desktop
+        cd /c/src/github.com/akiyosi/goneovim/cmd/goneovim
+        /c/bin/qtmoc
+        /c/bin/qtdeploy build desktop
 
     # - name: Test
     #   shell: msys2 {0}
