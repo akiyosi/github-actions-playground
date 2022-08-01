@@ -112,16 +112,22 @@ jobs:
     - name: Check dir
       run: |
         dir C:\
+        dir C:\bin\
         dir D:\a\_temp\
         dir D:\a\_temp\msys64
         dir D:\a\_temp\msys64\usr
         dir D:\a\_temp\msys64\usr\bin
 
+    # - name: Generate Qt bindings
+    #   if: ${{ steps.cache-qt-bindings-windows.outputs.cache-hit != 'true' }}
+    #   shell: msys2 {0}
+    #   run: |
+    #     /c/bin/qtsetup -test=false
+
     - name: Generate Qt bindings
       if: ${{ steps.cache-qt-bindings-windows.outputs.cache-hit != 'true' }}
-      shell: msys2 {0}
       run: |
-        /c/bin/qtsetup -test=false
+        C:\bin\qtsetup.exe -test=false
 
     - name: Get dependencies
       continue-on-error: true
