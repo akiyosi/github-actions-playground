@@ -65,11 +65,6 @@ jobs:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
 
-    - name: Check path
-      continue-on-error: true
-      run: |
-        dir C:\
-
     - name: Install Go
       continue-on-error: true
       run: |
