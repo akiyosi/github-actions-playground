@@ -71,6 +71,7 @@ jobs:
         update: true
         msystem: mingw64
         install: mingw-w64-x86_64-toolchain
+        location: C:\
     - shell: msys2 {0}
       run: |
         pacman --noconfirm -S sed git mingw-w64-x86_64-qt-creator mingw-w64-x86_64-qt5-static
