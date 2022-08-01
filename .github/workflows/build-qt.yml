@@ -56,23 +56,23 @@ jobs:
       run: |
         7z a ${{env.archiveName}}.zip D:\Qt5_binaries
 
-    - name: Check dir
-      shell: cmd
+    # - name: Check dir
+    #   shell: cmd
+    #   run: |
+    #     dir .
+    #     dir D:\Qt5_binaries\
+
+    - name: Publish
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        dir .
-        dir D:\Qt5_binaries\
+        gh release create $TAG_NAME $PRERELEASE --title "$SUBJECT" --target $GITHUB_SHA ${{env.archiveName}}.zip
 
-      - name: Publish
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create $TAG_NAME $PRERELEASE --title "$SUBJECT" --target $GITHUB_SHA ${{env.archiveName}}.zip
-
-    #- name: Release
-    #  env:
-    #    archiveName: qt-${{ env.qt_ver }}-${{ env.qt_type }}-${{ env.qt_arch }}
-    #  uses: softprops/action-gh-release@v1
-    #  with:
-    #    body_path: C:\qt5_shadow\config.summary
-    #    files: |
-    #      ${{env.archiveName}}.zip
+    # - name: Release
+    #   env:
+    #     archiveName: qt-${{ env.qt_ver }}-${{ env.qt_type }}-${{ env.qt_arch }}
+    #   uses: softprops/action-gh-release@v1
+    #   with:
+    #     body_path: C:\qt5_shadow\config.summary
+    #     files: |
+    #       ${{env.archiveName}}.zip
