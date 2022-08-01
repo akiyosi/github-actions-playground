@@ -109,6 +109,14 @@ jobs:
           !C:\src\github.com\therecipe\qt\.git
         key: ${{ matrix.qtversion }}-qtbindings-windows-${{ env.cache-version }}
 
+    - name: Check dir
+      run: |
+        dir C:\
+        dir D:\a\_temp\
+        dir D:\a\_temp\msys64
+        dir D:\a\_temp\msys64\usr
+        dir D:\a\_temp\msys64\usr\bin
+
     - name: Generate Qt bindings
       if: ${{ steps.cache-qt-bindings-windows.outputs.cache-hit != 'true' }}
       shell: msys2 {0}
