@@ -113,7 +113,7 @@ jobs:
       if: ${{ steps.cache-qt-bindings-windows.outputs.cache-hit != 'true' }}
       shell: msys2 {0}
       run: |
-        /d/a/github-actions-playground/github-actions-playground/bin/qtsetup -test=false
+        /c/bin/qtsetup -test=false
 
     - name: Get dependencies
       continue-on-error: true
