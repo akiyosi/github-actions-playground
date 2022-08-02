@@ -141,6 +141,7 @@ jobs:
     - name: Build
       shell: msys2 {0}
       run: |
+        export PATH=$PATH:/c/bin:/c/go-root/bin:/d/a/_temp/msys64/usr/bin
         cd /c/src/github.com/akiyosi/goneovim/cmd/goneovim
         /c/bin/qtmoc
         /c/bin/qtdeploy build desktop
