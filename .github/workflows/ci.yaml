@@ -109,21 +109,24 @@ jobs:
           !C:\src\github.com\therecipe\qt\.git
         key: ${{ matrix.qtversion }}-qtbindings-windows-${{ env.cache-version }}
 
-    - name: Check dir
-      run: |
-        dir C:\
-        dir C:\bin\
-        dir D:\a\_temp\
-        dir D:\a\_temp\msys64
-        dir D:\a\_temp\msys64\usr
-        dir D:\a\_temp\msys64\usr\bin
-        copy C:\bin\* D:\a\_temp\msys64\usr\bin\
-        copy C:\go-root\bin\go.exe D:\a\_temp\msys64\usr\bin\
+    # - name: Check dir
+    #   run: |
+    #     dir C:\
+    #     dir C:\bin\
+    #     dir D:\a\_temp\
+    #     dir D:\a\_temp\msys64
+    #     dir D:\a\_temp\msys64\usr
+    #     dir D:\a\_temp\msys64\usr\bin
+    #     copy C:\bin\* D:\a\_temp\msys64\usr\bin\
+    #     copy C:\go-root\bin\go.exe D:\a\_temp\msys64\usr\bin\
+    #     dir D:\a\_temp\msys64\usr\bin
 
     - name: Generate Qt bindings
       if: ${{ steps.cache-qt-bindings-windows.outputs.cache-hit != 'true' }}
       shell: msys2 {0}
       run: |
+        cp /c/bin/* /d/a/_temp/msys64/usr/bin
+        cp /c/go-root/bin/go /d/a/_temp/msys64/usr/bin
         /c/bin/qtsetup -test=false
 
     # - name: Generate Qt bindings
