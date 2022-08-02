@@ -6,7 +6,6 @@ env:
   qt_ver:    "5.15.5"
   qt_type:   static
   qt_arch:   "win64_mingw81"
-  archiveName: qt-${{ env.qt_ver }}-${{ env.qt_type }}_patched-qtbug71737
   
 jobs:
   build-qt-windows:
@@ -54,6 +53,8 @@ jobs:
         mingw32-make install
 
     - name: Package
+      env:
+        archiveName: qt-${{ env.qt_ver }}-${{ env.qt_type }}_patched-qtbug71737
       run: |
         7z a ${{env.archiveName}}.zip D:\Qt5_binaries
 
@@ -65,6 +66,7 @@ jobs:
 
     - name: Publish
       env:
+        archiveName: qt-${{ env.qt_ver }}-${{ env.qt_type }}_patched-qtbug71737
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         gh release create "qt5-patched-qtbug-71737" $PRERELEASE --title "$SUBJECT" --target $GITHUB_SHA ${{env.archiveName}}.zip
