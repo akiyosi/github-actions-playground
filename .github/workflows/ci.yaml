@@ -84,6 +84,12 @@ jobs:
         pacman -Scc
         pacman -Sc
 
+    - name: check path
+      run: |
+        dir D:\a\_temp\msys64
+        dir D:\a\_temp\msys64\mingw64
+        dir D:\a\_temp\msys64\mingw64\qt5-static\
+
     - name: Get Qt binding for Go
       run: |
         C:\go-root\bin\go.exe get -v -tags=no_env github.com/therecipe/qt/cmd/...
@@ -118,11 +124,6 @@ jobs:
         cp /c/go-root/bin/go /d/a/_temp/msys64/usr/bin
         /c/bin/qtsetup -test=false
 
-    # - name: Generate Qt bindings
-    #   if: ${{ steps.cache-qt-bindings-windows.outputs.cache-hit != 'true' }}
-    #   run: |
-    #     C:\bin\qtsetup.exe -test=false
-
     - name: Get dependencies
       continue-on-error: true
       run: |
@@ -132,12 +133,6 @@ jobs:
       run: |
         C:\go-root\bin\go.exe clean -cache
 
-    # - name: Build
-    #   run: |
-    #     cd ${{ github.workspace }}\src\github.com\akiyosi\goneovim\cmd\goneovim
-    #     ${{ github.workspace }}\bin\qtdeploy -ldflags "-X github.com/akiyosi/goneovim/editor.Version=${{ steps.version-windows.outputs.GONEOVIM_VERSION }}"  build desktop
-    #     Copy-Item ..\..\runtime -destination .\deploy\windows\ -recurse
-
     - name: Build
       shell: msys2 {0}
       run: |
@@ -146,7 +141,3 @@ jobs:
         /c/bin/qtmoc
         /c/bin/qtdeploy build desktop
 
-    # - name: Test
-    #   shell: msys2 {0}
-    #   run: |
-    #     /d/a/goneovim/goneovim/go-root/bin/go test github.com/akiyosi/goneovim/editor
