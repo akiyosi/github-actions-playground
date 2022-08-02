@@ -4,8 +4,9 @@ on: [push, pull_request]
 
 env: 
   qt_ver:    "5.15.5"
-  qt_type:   shared
+  qt_type:   static
   qt_arch:   "win64_mingw81"
+  archiveName: qt-${{ env.qt_ver }}-${{ env.qt_type }}_patched-qtbug71737
   
 jobs:
   build-qt-windows:
@@ -48,12 +49,11 @@ jobs:
       run: |
         mkdir C:\qt5_shadow
         cd C:\qt5_shadow
-        ..\qt5\configure.bat -${{ env.qt_type }} -release -opensource -static -confirm-license -optimize-size -platform win32-g++ -prefix "D:\Qt5_binaries" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -qt-doubleconversion -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -no-feature-geoservices_mapboxgl -make tools -skip qt3d -skip qtandroidextras -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtgamepad -skip qtlottie  -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquick3d -skip qtquicktimeline -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebview
+        ..\qt5\configure.bat -${{ env.qt_type }} -release -opensource -confirm-license -optimize-size -platform win32-g++ -prefix "D:\Qt5_binaries" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -qt-doubleconversion -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -no-feature-geoservices_mapboxgl -make tools -skip qt3d -skip qtandroidextras -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtgamepad -skip qtlottie  -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquick3d -skip qtquicktimeline -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebview
         mingw32-make -j2
         mingw32-make install
+
     - name: Package
-      env:
-        archiveName: qt-${{ env.qt_ver }}-${{ env.qt_type }}-${{ env.qt_arch }}
       run: |
         7z a ${{env.archiveName}}.zip D:\Qt5_binaries
 
