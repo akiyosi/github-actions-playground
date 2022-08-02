@@ -117,17 +117,19 @@ jobs:
         dir D:\a\_temp\msys64
         dir D:\a\_temp\msys64\usr
         dir D:\a\_temp\msys64\usr\bin
-
-    # - name: Generate Qt bindings
-    #   if: ${{ steps.cache-qt-bindings-windows.outputs.cache-hit != 'true' }}
-    #   shell: msys2 {0}
-    #   run: |
-    #     /c/bin/qtsetup -test=false
+        copy C:\bin\* D:\a\_temp\msys64\usr\bin\
+        copy C:\go-root\bin\go.exe D:\a\_temp\msys64\usr\bin\
 
     - name: Generate Qt bindings
       if: ${{ steps.cache-qt-bindings-windows.outputs.cache-hit != 'true' }}
+      shell: msys2 {0}
       run: |
-        C:\bin\qtsetup.exe -test=false
+        /c/bin/qtsetup -test=false
+
+    # - name: Generate Qt bindings
+    #   if: ${{ steps.cache-qt-bindings-windows.outputs.cache-hit != 'true' }}
+    #   run: |
+    #     C:\bin\qtsetup.exe -test=false
 
     - name: Get dependencies
       continue-on-error: true
