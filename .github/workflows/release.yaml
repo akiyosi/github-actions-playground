@@ -1,16 +1,16 @@
 name: Release
-on:
-  schedule:
-    - cron: '0 2 * * *' # run at 2 AM UTC
-  workflow_dispatch:
-    inputs:
-      tag_name:
-        description: 'Tag name for release'
-        required: false
-        default: nightly
-  push:
-    tags:
-      - v[0-9]+.[0-9]+.[0-9]+
+# on:
+#  schedule:
+#    - cron: '0 2 * * *' # run at 2 AM UTC
+#  workflow_dispatch:
+#    inputs:
+#      tag_name:
+#        description: 'Tag name for release'
+#        required: false
+#        default: nightly
+#  push:
+#    tags:
+#      - v[0-9]+.[0-9]+.[0-9]+
 
 jobs:
   linux:
