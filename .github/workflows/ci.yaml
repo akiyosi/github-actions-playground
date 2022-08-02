@@ -131,6 +131,7 @@ jobs:
       if: ${{ steps.cache-qt-bindings-windows.outputs.cache-hit != 'true' }}
       shell: msys2 {0}
       run: |
+        export PATH=$PATH:/c/bin:/c/go-root/bin:/d/a/_temp/msys64/usr/bin
         cp /c/bin/* /d/a/_temp/msys64/usr/bin
         cp /c/go-root/bin/go /d/a/_temp/msys64/usr/bin
         /c/bin/qtsetup -test=false
