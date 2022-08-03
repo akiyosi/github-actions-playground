@@ -42,12 +42,12 @@ jobs:
         cp -fp .\qfontdatabase.cpp C:\qt5\qtbase\src\gui\text\
         dir C:\qt5
 
-    # ..\qt5\configure.bat -${{ env.qt_type }} -release -opensource -static -confirm-license -optimize-size -platform win32-g++ -prefix "D:\Qt5_binaries" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -qt-doubleconversion -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -no-feature-geoservices_mapboxgl -make tools -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtgamepad -skip qtlottie  -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquicktimeline -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtspeech -skip qtquick3d -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebview -skip qtwebengine
+    # ..\qt5\configure.bat -${{ env.qt_type }} -release -opensource -static -confirm-license -optimize-size -platform win32-g++ -prefix "D:\qt5" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -qt-doubleconversion -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -no-feature-geoservices_mapboxgl -make tools -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtgamepad -skip qtlottie  -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquicktimeline -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtspeech -skip qtquick3d -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebview -skip qtwebengine
     - name: Build
       run: |
         mkdir C:\qt5_shadow
         cd C:\qt5_shadow
-        ..\qt5\configure.bat -static -release -opensource -confirm-license -optimize-size -platform win32-g++ -prefix "D:\Qt5_binaries" -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -no-feature-geoservices_mapboxgl -make tools -skip qtandroidextras -skip qtmacextras -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebview
+        ..\qt5\configure.bat -static -release -opensource -confirm-license -optimize-size -platform win32-g++ -prefix "D:\qt5" -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -qt-sqlite -qt-zlib -qt-libjpeg -qt-libpng -qt-freetype -qt-pcre -qt-harfbuzz -skip qtandroidextras -skip qtmacextras -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebview
         mingw32-make -j2
         mingw32-make install
 
@@ -55,18 +55,19 @@ jobs:
       env:
         archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
       run: |
-        7z a ${{env.archiveName}}.zip D:\Qt5_binaries
+        7z a ${{env.archiveName}}.zip D:\qt5
 
     - name: Check dir
       shell: cmd
       run: |
         dir .
-        dir D:\Qt5_binaries\
+        dir D:\qt5\
 
     - name: Publish
       env:
         archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        gh release delete "qt5-patched-qtbug-71737"  --yes || true
         gh release create "qt5-patched-qtbug-71737" $PRERELEASE --title "qt5-patched-qtbug-71737" --target $GITHUB_SHA ${{env.archiveName}}.zip
 
