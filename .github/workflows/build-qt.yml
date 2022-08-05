@@ -47,39 +47,7 @@ jobs:
       run: |
         mkdir C:\qt5_shadow
         cd C:\qt5_shadow
-        ..\qt5\configure.bat -platform win32-g++ -prefix "D:\qt5"  \
-         -release -opensource -confirm-license  \
-         -static -static-runtime -no-jasper -no-mng -D "JAS_DLL=0" \
-         -opengl desktop \
-         -no-openssl  \
-         -nomake tests -nomake examples \
-         -no-icu  \
-         -no-fontconfig \
-         -schannel \
-         -dbus \
-         -qt-freetype \
-         -qt-pcre \
-         -qt-libpng \
-         -qt-libjpeg \
-         -qt-harfbuzz \
-         -qt-assimp \
-         -qt-doubleconversion \
-         -qt-tiff \
-         -qt-webp \
-         -no-sql-ibase \
-         -no-sql-mysql \
-         -no-sql-odbc \
-         -no-sql-psql \
-         -no-sql-sqlite2 \
-         -sql-sqlite \
-         -qt-sqlite \
-         -skip qttools  \
-         -skip qtandroidextras  \
-         -skip qtmacextras  \
-         -skip qtwayland  \
-         -skip qtwebchannel  \
-         -skip qtwebengine  \
-         -skip qtwebview
+        ..\qt5\configure.bat -platform win32-g++ -prefix "D:\qt5" -release -opensource -confirm-license -static -static-runtime -no-jasper -no-mng -D "JAS_DLL=0" -opengl desktop -no-openssl -nomake tests -nomake examples -no-icu -no-fontconfig -schannel -dbus -qt-freetype -qt-pcre -qt-libpng -qt-libjpeg -qt-harfbuzz -qt-assimp -qt-doubleconversion -qt-tiff -qt-webp -no-sql-ibase -no-sql-mysql -no-sql-odbc -no-sql-psql -no-sql-sqlite2 -sql-sqlite -qt-sqlite -skip qttools -skip qtandroidextras -skip qtmacextras -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebview
         mingw32-make -j2
         mingw32-make install
 
