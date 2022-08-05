@@ -139,7 +139,14 @@ jobs:
       run: |
         go get -v -d github.com/akiyosi/goneovim/...
 
-    - name: Get dependencies
+    - name: Generate moc
+      shell: msys2 {0}
+      run: |
+        export PATH=$PATH:/c/bin:/c/go-root/bin:/d/a/_temp/msys64/usr/bin
+        cd /c/src/github.com/akiyosi/goneovim/cmd/goneovim
+        /c/bin/qtmoc
+
+    - name: Get test
       run: |
         go test github.com/akiyosi/goneovim/editor
 
@@ -152,6 +159,5 @@ jobs:
       run: |
         export PATH=$PATH:/c/bin:/c/go-root/bin:/d/a/_temp/msys64/usr/bin
         cd /c/src/github.com/akiyosi/goneovim/cmd/goneovim
-        /c/bin/qtmoc
         /c/bin/qtdeploy build desktop
 
