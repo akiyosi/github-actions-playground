@@ -105,22 +105,21 @@ jobs:
       run: |
         go get -v -d github.com/akiyosi/goneovim/...
 
-    - name: Genarate moc
-      continue-on-error: true
-      run: |
-        cd C:\src\github.com\akiyosi\goneovim\cmd\goneovim
-        C:\bin\qtmoc.exe
+    #- name: Genarate moc
+    #  continue-on-error: true
+    #  run: |
+    #    cd C:\src\github.com\akiyosi\goneovim\cmd\goneovim
+    #    C:\bin\qtmoc.exe
 
-    - name: Test
-      run: |
-        go test github.com/akiyosi/goneovim/editor
+    #- name: Test
+    #  run: |
+    #    go test github.com/akiyosi/goneovim/editor
 
-    - name: Re-Generate moc
+    - name: Generate moc
       shell: msys2 {0}
       run: |
         export PATH=$PATH:/c/bin:/c/go-root/bin:/d/a/_temp/msys64/usr/bin
         cd /c/src/github.com/akiyosi/goneovim/
-        rm -fr editor/moc*
         cd ./cmd/goneovim
         /c/bin/qtmoc
 
