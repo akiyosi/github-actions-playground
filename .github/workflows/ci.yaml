@@ -105,16 +105,6 @@ jobs:
       run: |
         go get -v -d github.com/akiyosi/goneovim/...
 
-    - name: Genarate moc
-      continue-on-error: true
-      run: |
-        cd C:\src\github.com\akiyosi\goneovim\cmd\goneovim
-        C:\bin\qtmoc.exe
-
-    - name: Test
-      run: |
-        go test github.com/akiyosi/goneovim/editor
-
     - name: Generate moc
       shell: msys2 {0}
       run: |
@@ -130,3 +120,7 @@ jobs:
         cd /c/src/github.com/akiyosi/goneovim/cmd/goneovim
         /c/bin/qtdeploy build desktop
 
+    - name: Test
+      shell: msys2 {0}
+      run: |
+        go test github.com/akiyosi/goneovim/editor
