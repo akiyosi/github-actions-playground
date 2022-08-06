@@ -70,14 +70,10 @@ jobs:
     #     7z a ${{env.archiveName}}.zip C:\qt5
 
 
-    - if: github.event_name == 'workflow_dispatch'
-      run: echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
-    - if: github.event_name == 'schedule'
-      run: echo 'TAG_NAME=qt5-patched-qtbug-71737' >> $GITHUB_ENV
-    - if: github.event_name == 'push'
+    - name: tagname
       run: |
         TAG_NAME=${{ github.ref }}
-        echo "TAG_NAME=${TAG_NAME#refs/tags/}" >> $GITHUB_ENV
+        echo "TAG_NAME=qt5-patched-qtbug-71737" >> $GITHUB_ENV
 
     - name: Remove current release
       continue-on-error: true
