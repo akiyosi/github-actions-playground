@@ -76,7 +76,7 @@ jobs:
       env:
         archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
       run: |
-        7z a ${{env.archiveName}}.zip C:\qt5
+        7z a ${{env.archiveName}}.zip D:\qt5
 
     - name: Remove current release
       continue-on-error: true

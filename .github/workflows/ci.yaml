@@ -121,6 +121,7 @@ jobs:
         /c/bin/qtdeploy build desktop
 
     - name: Test
+      continue-on-error: true
       shell: msys2 {0}
       run: |
         /c/go-root/bin/go test github.com/akiyosi/goneovim/editor
