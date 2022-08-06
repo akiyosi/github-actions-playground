@@ -29,12 +29,12 @@ jobs:
     #     mv C:\qt-everywhere-src-${{ env.qt_ver }} C:\qt5
     #     dir C:\qt5
 
-    # - name: Checkout code
-    #   uses: actions/checkout@v2
-    #   with:
-    #     repository: ''
-    #     fetch-depth: 0
-    #     path: .
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        repository: ''
+        fetch-depth: 0
+        path: .
 
     # - name: Apply patch
     #   shell: cmd
