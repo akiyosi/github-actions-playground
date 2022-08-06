@@ -53,6 +53,8 @@ jobs:
     #     mingw32-make install
 
     - name: Check dir
+      env:
+        archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
       shell: cmd
       run: |
         dir .
