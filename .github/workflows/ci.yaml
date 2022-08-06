@@ -109,7 +109,7 @@ jobs:
       continue-on-error: true
       run: |
         cd C:\src\github.com\akiyosi\goneovim\cmd\goneovim
-        ${{ github.workspace }}\bin\qtmoc.exe
+        C:\bin\qtmoc.exe
 
     - name: Test
       run: |
