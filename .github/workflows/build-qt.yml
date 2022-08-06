@@ -83,9 +83,7 @@ jobs:
         archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        git tag qt5-patched-qtbug-71737
-        git tag
-        git push origin qt5-patched-qtbug-71737 || true
+        git push origin :qt5-patched-qtbug-71737 || true
 
         # - name: Set PATH
         #   env:
