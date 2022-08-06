@@ -76,12 +76,18 @@ jobs:
         gh release delete qt5-patched-qtbug-71737 --yes || true
         git push origin :qt5-patched-qtbug-71737 || true
 
+    - name: Set PATH
+      run: |
+        $env:TAG_NAME = "TAG_NAME=qt5-patched-qtbug-71737"
+        echo "::set-env name=TAG_NAME::$env:TAG_NAME"
 
-    - name: Set tagname
-      run: echo 'TAG_NAME=qt5-patched-qtbug-71737' >> $GITHUB_ENV
+    # - name: Set tagname
+    #   run: echo 'TAG_NAME=qt5-patched-qtbug-71737' >> $GITHUB_ENV
 
     - name: Check tagname
-      run: echo $TAG_NAME
+      run: |
+        echo $TAG_NAME
+        echo "hoge"
 
     - name: Publish
       env:
