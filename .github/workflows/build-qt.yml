@@ -67,11 +67,17 @@ jobs:
     #   run: |
     #     7z a ${{env.archiveName}}.zip C:\qt5
 
-    - name: Publish
+    - name: Remove current release
       env:
         archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         gh release delete "qt5-patched-qtbug-71737"  --yes || true
+
+    - name: Publish
+      env:
+        archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
         gh release create "qt5-patched-qtbug-71737" $PRERELEASE --title "qt5-patched-qtbug-71737" --target $GITHUB_SHA ${{env.archiveName}}.zip
 
