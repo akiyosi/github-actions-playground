@@ -77,6 +77,8 @@ jobs:
         git push origin :qt5-patched-qtbug-71737 || true
 
     - name: Set PATH
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       run: |
         $env:TAG_NAME = "TAG_NAME=qt5-patched-qtbug-71737"
         echo "::set-env name=TAG_NAME::$env:TAG_NAME"
