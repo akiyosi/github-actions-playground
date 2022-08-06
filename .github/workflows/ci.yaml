@@ -4,43 +4,8 @@ on: [push, pull_request]
 env:
   cache-version: v2
 jobs:
-  # test-and-build-windows:
-  # build-qt5:
-  #   strategy:
-  #     matrix:
-  #       platform: [windows-latest]
-  #       qtversion: [5.14.1]
-  #   runs-on: ${{ matrix.platform }}
-  #   env:
-  #     GOPATH: ${{ github.workspace }}
-  #     GOROOT: ${{ github.workspace }}\go-root
-  #     QT_VERSION: ${{ matrix.qtversion }}
-  #     QT_DIR: ${{ github.workspace }}\Qt
-  #     QT_MSYS2: true
-  #     QT_MSYS2_DIR: D:\a\_temp\msys64\
-  #     QT_MSVC: false
-  #     QT_DEBUG: false
-  #     GO111MODULE: off
-  #     CGO_CFLAGS_ALLOW: ".*" 
-  #     CGO_CXXFLAGS_ALLOW: ".*" 
-  #     CGO_LDFLAGS_ALLOW: ".*" 
-  #     #CGO_ENABLED: 1
-  #     ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-  #   steps:
 
-  #   - name: Setup MSYS2 and install Qt5
-  #     uses: msys2/setup-msys2@v2
-  #     with:
-  #       update: true
-  #       msystem: mingw64
-  #       install: mingw-w64-x86_64-toolchain
-  #   - shell: msys2 {0}
-  #     run: |
-  #       pacman --noconfirm -S sed git mingw-w64-x86_64-toolchain mingw-w64-x86_64-python2
-  #       git clone http://code.qt.io/qt/qt5.git D:\a\_temp\msys64\qt
-
-  # test-and-build-windows:
-  test-windows:
+  test-and-build-windows:
     strategy:
       matrix:
         platform: [windows-latest]
@@ -96,6 +61,7 @@ jobs:
 
     - name: check path
       run: |
+        dir D:\a\_temp
         dir D:\a\_temp\msys64
         dir D:\a\_temp\msys64\mingw64
         dir D:\a\_temp\msys64\mingw64\qt5-static\
@@ -114,7 +80,7 @@ jobs:
     # FIXME: Should be fixed with the deprecation of set-env
     - name: Set PATH
       run: |
-        $env:PATH = "C:\\msys64\\usr\\bin;C:\\bin;C:\\go-root\\bin;$env:PATH"
+        $env:PATH = "D:\\a\\_temp\\msys64;C:\\bin;C:\\go-root\\bin;$env:PATH"
         echo "::set-env name=PATH::$env:PATH"
 
     - uses: actions/cache@v2
@@ -139,20 +105,25 @@ jobs:
       run: |
         go get -v -d github.com/akiyosi/goneovim/...
 
-    - name: Generate moc
-      shell: msys2 {0}
+    - name: Genarate moc
+      continue-on-error: true
+      env:
       run: |
-        export PATH=$PATH:/c/bin:/c/go-root/bin:/d/a/_temp/msys64/usr/bin
-        cd /c/src/github.com/akiyosi/goneovim/cmd/goneovim
-        /c/bin/qtmoc
+        cd C:\src\github.com\akiyosi\goneovim\cmd\goneovim
+        ${{ github.workspace }}\bin\qtmoc.exe
 
-    - name: Get test
+    - name: Test
       run: |
         go test github.com/akiyosi/goneovim/editor
 
-    # - name: Clear Go build caches
-    #   run: |
-    #     C:\go-root\bin\go.exe clean -cache
+    - name: Re-Generate moc
+      shell: msys2 {0}
+      run: |
+        export PATH=$PATH:/c/bin:/c/go-root/bin:/d/a/_temp/msys64/usr/bin
+        cd /c/src/github.com/akiyosi/goneovim/
+        rm -fr editor/moc*
+        cd ./cmd/goneovim
+        /c/bin/qtmoc
 
     - name: Build
       shell: msys2 {0}
