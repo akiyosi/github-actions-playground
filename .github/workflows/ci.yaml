@@ -123,4 +123,4 @@ jobs:
     - name: Test
       shell: msys2 {0}
       run: |
-        go test github.com/akiyosi/goneovim/editor
+        /c/go-root/bin/go test github.com/akiyosi/goneovim/editor
