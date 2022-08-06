@@ -68,17 +68,18 @@ jobs:
     #     7z a ${{env.archiveName}}.zip C:\qt5
 
     - name: Remove current release
+      continue-on-error: true
       env:
         archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release delete qt5-patched-qtbug-71737 --yes || true
-        git push origin :qt5-patched-qtbug-71737 || true
+        gh release delete v0.1 --yes || true
+        git push origin :v0.1 || true
 
     - name: Publish
       env:
         archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release create qt5-patched-qtbug-71737 $PRERELEASE --title "qt5-patched-qtbug-71737" --target $GITHUB_SHA ${{env.archiveName}}.zip
+        gh release create v0.1 $PRERELEASE --title "qt5-patched-qtbug-71737" --target $GITHUB_SHA ${{env.archiveName}}.zip
 
