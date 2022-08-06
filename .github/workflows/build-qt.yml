@@ -69,28 +69,38 @@ jobs:
     #   run: |
     #     7z a ${{env.archiveName}}.zip C:\qt5
 
-    # - name: Remove current release
-    #   continue-on-error: true
-    #   env:
-    #     archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
-    #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   run: |
-    #     gh release delete qt5-patched-qtbug-71737 --yes || true
 
-    # - name: Overwrite tag
-    #   continue-on-error: true
-    #   env:
-    #     archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
-    #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   run: |
-    #     git push origin :qt5-patched-qtbug-71737 || true
+    - if: github.event_name == 'workflow_dispatch'
+      run: echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
+    - if: github.event_name == 'schedule'
+      run: echo 'TAG_NAME=qt5-patched-qtbug-71737' >> $GITHUB_ENV
+    - if: github.event_name == 'push'
+      run: |
+        TAG_NAME=${{ github.ref }}
+        echo "TAG_NAME=${TAG_NAME#refs/tags/}" >> $GITHUB_ENV
 
-    # - name: Set PATH
-    #   env:
-    #     ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-    #   run: |
-    #     $env:TAG_NAME = "TAG_NAME=qt5-patched-qtbug-71737"
-    #     echo "::set-env name=TAG_NAME::$env:TAG_NAME"
+    - name: Remove current release
+      continue-on-error: true
+      env:
+        archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh release delete qt5-patched-qtbug-71737 --yes || true
+
+    - name: Overwrite tag
+      continue-on-error: true
+      env:
+        archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git push origin :qt5-patched-qtbug-71737 || true
+
+        # - name: Set PATH
+        #   env:
+        #     ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+        #   run: |
+        #     $env:TAG_NAME = "TAG_NAME=qt5-patched-qtbug-71737"
+        #     echo "::set-env name=TAG_NAME::$env:TAG_NAME"
 
     # - name: Set tagname
     #   run: echo 'TAG_NAME=qt5-patched-qtbug-71737' >> $GITHUB_ENV
@@ -100,5 +110,5 @@ jobs:
         archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release create "patched-qtbug-71737" $PRERELEASE --title "qt5-patched-qtbug-71737" --target $GITHUB_SHA ${{env.archiveName}}.zip
+        gh release create $TAG_NAME $PRERELEASE --title "qt5-patched-qtbug-71737" --target $GITHUB_SHA ${{env.archiveName}}.zip
 
