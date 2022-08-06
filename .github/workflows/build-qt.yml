@@ -76,12 +76,12 @@ jobs:
         gh release delete qt5-patched-qtbug-71737 --yes || true
         git push origin :qt5-patched-qtbug-71737 || true
 
-    - name: Set PATH
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-      run: |
-        $env:TAG_NAME = "TAG_NAME=qt5-patched-qtbug-71737"
-        echo "::set-env name=TAG_NAME::$env:TAG_NAME"
+        # - name: Set PATH
+        #   env:
+        #     ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+        #   run: |
+        #     $env:TAG_NAME = "TAG_NAME=qt5-patched-qtbug-71737"
+        #     echo "::set-env name=TAG_NAME::$env:TAG_NAME"
 
     # - name: Set tagname
     #   run: echo 'TAG_NAME=qt5-patched-qtbug-71737' >> $GITHUB_ENV
@@ -96,5 +96,5 @@ jobs:
         archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release create $TAG_NAME $PRERELEASE --title "qt5-patched-qtbug-71737" --target $GITHUB_SHA ${{env.archiveName}}.zip
+        gh release create "qt5-patched-qtbug-71737" $PRERELEASE --title "qt5-patched-qtbug-71737" --target $GITHUB_SHA ${{env.archiveName}}.zip
 
