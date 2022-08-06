@@ -45,7 +45,7 @@ jobs:
         install: mingw-w64-x86_64-toolchain
     - shell: msys2 {0}
       run: |
-        pacman --noconfirm -S sed git unzip mingw-w64-x86_64-qt-creator mingw-w64-x86_64-qt5-static
+        pacman --noconfirm -S sed git unzip mingw-w64-x86_64-qt-creator mingw-w64-x86_64-toolchain mingw-w64-x86_64-qt5-static
         pacman -Scc
         pacman -Sc
 
@@ -105,15 +105,15 @@ jobs:
       run: |
         go get -v -d github.com/akiyosi/goneovim/...
 
-    #- name: Genarate moc
-    #  continue-on-error: true
-    #  run: |
-    #    cd C:\src\github.com\akiyosi\goneovim\cmd\goneovim
-    #    C:\bin\qtmoc.exe
+    - name: Genarate moc
+      continue-on-error: true
+      run: |
+        cd C:\src\github.com\akiyosi\goneovim\cmd\goneovim
+        C:\bin\qtmoc.exe
 
-    #- name: Test
-    #  run: |
-    #    go test github.com/akiyosi/goneovim/editor
+    - name: Test
+      run: |
+        go test github.com/akiyosi/goneovim/editor
 
     - name: Generate moc
       shell: msys2 {0}
