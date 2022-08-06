@@ -80,6 +80,9 @@ jobs:
     - name: Set tagname
       run: echo 'TAG_NAME=qt5-patched-qtbug-71737' >> $GITHUB_ENV
 
+    - name: Check tagname
+      run: echo $TAG_NAME
+
     - name: Publish
       env:
         archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
