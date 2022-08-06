@@ -73,13 +73,17 @@ jobs:
         archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release delete v0.1 --yes || true
-        git push origin :v0.1 || true
+        gh release delete qt5-patched-qtbug-71737 --yes || true
+        git push origin :qt5-patched-qtbug-71737 || true
+
+
+    - name: Set tagname
+      run: echo 'TAG_NAME=qt5-patched-qtbug-71737' >> $GITHUB_ENV
 
     - name: Publish
       env:
         archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release create v0.1 $PRERELEASE --title "qt5-patched-qtbug-71737" --target $GITHUB_SHA ${{env.archiveName}}.zip
+        gh release create $TAG_NAME $PRERELEASE --title "qt5-patched-qtbug-71737" --target $GITHUB_SHA ${{env.archiveName}}.zip
 
