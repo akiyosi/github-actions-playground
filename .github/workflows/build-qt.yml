@@ -102,5 +102,5 @@ jobs:
         archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release create qt5-patched-qtbug-71737 $PRERELEASE --title "qt5-patched-qtbug-71737" --target $GITHUB_SHA ${{env.archiveName}}.zip
+        gh release create "qt5-patched-qtbug-71737" $PRERELEASE --title "qt5-patched-qtbug-71737" --target $GITHUB_SHA ${{env.archiveName}}.zip
 
