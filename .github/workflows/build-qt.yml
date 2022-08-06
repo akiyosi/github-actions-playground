@@ -53,6 +53,14 @@ jobs:
         mingw32-make -j2
         mingw32-make install
 
+    - name: Check dir
+      env:
+        archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
+      shell: cmd
+      run: |
+        dir .
+        dir D:\qt5\
+
     # - name: Check dir
     #   env:
     #     archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
@@ -70,11 +78,6 @@ jobs:
       run: |
         7z a ${{env.archiveName}}.zip C:\qt5
 
-
-    - name: tagname
-      run: |
-        echo "TAG_NAME=qt5-patched-qtbug-71737" >> $GITHUB_ENV
-
     - name: Remove current release
       continue-on-error: true
       env:
@@ -89,6 +92,7 @@ jobs:
         archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        git tag -d qt5-patched-qtbug-71737
         git push origin :qt5-patched-qtbug-71737 || true
 
     - name: Publish
