@@ -85,6 +85,7 @@ jobs:
       run: |
         git tag qt5-patched-qtbug-71737
         git tag
+        git push origin qt5-patched-qtbug-71737 || true
 
         # - name: Set PATH
         #   env:
