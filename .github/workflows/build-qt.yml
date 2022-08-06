@@ -72,7 +72,6 @@ jobs:
 
     - name: tagname
       run: |
-        TAG_NAME=${{ github.ref }}
         echo "TAG_NAME=qt5-patched-qtbug-71737" >> $GITHUB_ENV
 
     - name: Remove current release
