@@ -57,7 +57,6 @@ jobs:
         ls -l qt5/
         cp -fpR qt5/bin /mingw64/qt5-static/
         cp -fpR qt5/lib /mingw64/qt5-static/
-        cp -fpR qt5/include /mingw64/qt5-static/
         cp -fpR qt5/plugins /mingw64/qt5-static/
 
     - name: check path
