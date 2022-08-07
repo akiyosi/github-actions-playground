@@ -65,6 +65,11 @@ jobs:
         dir D:\a\_temp\msys64
         dir D:\a\_temp\msys64\mingw64
         dir D:\a\_temp\msys64\mingw64\qt5-static\
+        dir D:\a\_temp\msys64\mingw64\qt5-static\bin
+        dir D:\a\_temp\msys64\mingw64\qt5-static\include
+        dir D:\a\_temp\msys64\mingw64\qt5-static\lib
+        dir D:\a\_temp\msys64\mingw64\qt5-static\plugins
+        dir D:\a\_temp\msys64\mingw64\qt5-static\share
 
     - name: Get Qt binding for Go
       run: |
