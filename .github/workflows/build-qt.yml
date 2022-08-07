@@ -1,6 +1,6 @@
 name: build-qt
 
-on: [push]
+# on: [push]
 
 env: 
   qt_ver:    "5.15.5"
