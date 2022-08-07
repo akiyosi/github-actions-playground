@@ -49,17 +49,17 @@ jobs:
         pacman -Scc
         pacman -Sc
 
-    - name: check path
-      run: |
-        dir D:\a\_temp
-        dir D:\a\_temp\msys64
-        dir D:\a\_temp\msys64\mingw64
-        dir D:\a\_temp\msys64\mingw64\qt5-static\
-        dir D:\a\_temp\msys64\mingw64\qt5-static\bin
-        dir D:\a\_temp\msys64\mingw64\qt5-static\include
-        dir D:\a\_temp\msys64\mingw64\qt5-static\lib
-        dir D:\a\_temp\msys64\mingw64\qt5-static\plugins
-        dir D:\a\_temp\msys64\mingw64\qt5-static\share
+    # - name: check path
+    #   run: |
+    #     dir D:\a\_temp
+    #     dir D:\a\_temp\msys64
+    #     dir D:\a\_temp\msys64\mingw64
+    #     dir D:\a\_temp\msys64\mingw64\qt5-static\
+    #     dir D:\a\_temp\msys64\mingw64\qt5-static\bin
+    #     dir D:\a\_temp\msys64\mingw64\qt5-static\include
+    #     dir D:\a\_temp\msys64\mingw64\qt5-static\lib
+    #     dir D:\a\_temp\msys64\mingw64\qt5-static\plugins
+    #     dir D:\a\_temp\msys64\mingw64\qt5-static\share
 
     - name: Patch qt5
       shell: msys2 {0}
@@ -69,7 +69,11 @@ jobs:
         ls -l qt5/
         cp -fpR qt5/bin /mingw64/qt5-static/
         cp -fpR qt5/lib /mingw64/qt5-static/
+        cp -fpR qt5/include /mingw64/qt5-static/
         cp -fpR qt5/plugins /mingw64/qt5-static/
+        cp -fpR qt5/mkspecs /mingw64/qt5-static/share/qt5
+        cp -fpR qt5/plugins /mingw64/qt5-static/share/qt5
+        cp -fpR qt5/qml /mingw64/qt5-static/share/qt5
 
 
     - name: Get Qt binding for Go
