@@ -49,16 +49,6 @@ jobs:
         pacman -Scc
         pacman -Sc
 
-    - name: Patch qt5
-      shell: msys2 {0}
-      run: | 
-        curl -sL --retry 10 --retry-delay 60 -O https://github.com/akiyosi/github-actions-playground/releases/download/qt5-patched-qtbug-71737/qt-5.15.5_patched-qtbug71737.zip
-        unzip qt-5.15.5_patched-qtbug71737.zip
-        ls -l qt5/
-        cp -fpR qt5/bin /mingw64/qt5-static/
-        cp -fpR qt5/lib /mingw64/qt5-static/
-        cp -fpR qt5/plugins /mingw64/qt5-static/
-
     - name: check path
       run: |
         dir D:\a\_temp
@@ -70,6 +60,17 @@ jobs:
         dir D:\a\_temp\msys64\mingw64\qt5-static\lib
         dir D:\a\_temp\msys64\mingw64\qt5-static\plugins
         dir D:\a\_temp\msys64\mingw64\qt5-static\share
+
+    - name: Patch qt5
+      shell: msys2 {0}
+      run: | 
+        curl -sL --retry 10 --retry-delay 60 -O https://github.com/akiyosi/github-actions-playground/releases/download/qt5-patched-qtbug-71737/qt-5.15.5_patched-qtbug71737.zip
+        unzip qt-5.15.5_patched-qtbug71737.zip
+        ls -l qt5/
+        cp -fpR qt5/bin /mingw64/qt5-static/
+        cp -fpR qt5/lib /mingw64/qt5-static/
+        cp -fpR qt5/plugins /mingw64/qt5-static/
+
 
     - name: Get Qt binding for Go
       run: |
