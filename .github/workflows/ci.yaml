@@ -133,8 +133,9 @@ jobs:
     #     /c/go-root/bin/go test github.com/akiyosi/goneovim/editor
 
     - name: Archive
+      shell: msys2 {0}
       run: |
-        cd C:/src/github.com/akiyosi/goneovim/cmd/goneovim/deploy
+        cd /c/src/github.com/akiyosi/goneovim/cmd/goneovim/deploy
         mv windows goneovim-windows
         zip goneovim-windows -r goneovim-windows
 
