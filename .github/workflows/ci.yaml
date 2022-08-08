@@ -45,7 +45,7 @@ jobs:
         install: mingw-w64-x86_64-toolchain
     - shell: msys2 {0}
       run: |
-        pacman --noconfirm -S sed git unzip mingw-w64-x86_64-qt-creator mingw-w64-x86_64-qt5-static
+        pacman --noconfirm -S sed git unzip zip mingw-w64-x86_64-qt-creator mingw-w64-x86_64-qt5-static
         pacman -Scc
         pacman -Sc
 
