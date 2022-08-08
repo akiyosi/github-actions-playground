@@ -131,3 +131,15 @@ jobs:
       shell: msys2 {0}
       run: |
         /c/go-root/bin/go test github.com/akiyosi/goneovim/editor
+
+    - name: Archive
+      run: |
+        cd C:/src/github.com/akiyosi/goneovim/cmd/goneovim/deploy
+        mv windows goneovim-windows
+        zip goneovim-windows -r goneovim-windows
+
+    - name: Upload for windows
+      uses: actions/upload-artifact@v1
+      with:
+        name: goneovim-windows
+        path: C:/src/github.com/akiyosi/goneovim/cmd/goneovim/deploy/goneovim-windows.zip
