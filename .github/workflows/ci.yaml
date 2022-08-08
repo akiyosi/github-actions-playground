@@ -2,7 +2,7 @@
 name: CI
 on: [push, pull_request]
 env:
-  cache-version: v1
+  cache-version: v2
 jobs:
 
   test-and-build-windows:
@@ -68,6 +68,8 @@ jobs:
         unzip qt-5.15.5_patched-qtbug71737.zip
         ls -l qt5/
         cp -fpR qt5/* /mingw64/qt5-static/
+        rm -fr qt5
+        rm qt-5.15.5_patched-qtbug71737.zip
 
 
     - name: Get Qt binding for Go
