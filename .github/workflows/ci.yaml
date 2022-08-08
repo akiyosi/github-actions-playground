@@ -83,11 +83,11 @@ jobs:
         fetch-depth: 0
         path: .\src\github.com\akiyosi\goneovim
 
-    # FIXME: Should be fixed with the deprecation of set-env
-    - name: Set PATH
-      run: |
-        $env:PATH = "D:\\a\\_temp\\msys64;C:\\bin;C:\\go-root\\bin;$env:PATH"
-        echo "::set-env name=PATH::$env:PATH"
+    # # FIXME: Should be fixed with the deprecation of set-env
+    # - name: Set PATH
+    #   run: |
+    #     $env:PATH = "D:\\a\\_temp\\msys64;C:\\bin;C:\\go-root\\bin;$env:PATH"
+    #     echo "::set-env name=PATH::$env:PATH"
 
     - uses: actions/cache@v2
       id: cache-qt-bindings-windows
@@ -131,6 +131,11 @@ jobs:
     #   shell: msys2 {0}
     #   run: |
     #     /c/go-root/bin/go test github.com/akiyosi/goneovim/editor
+
+    - name: Test
+      continue-on-error: true
+      run: |
+        go test github.com/akiyosi/goneovim/editor
 
     - name: Archive
       shell: msys2 {0}
