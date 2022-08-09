@@ -104,6 +104,7 @@ jobs:
         export PATH=$PATH:/c/bin:/c/go-root/bin:/d/a/_temp/msys64/usr/bin
         cp /c/bin/* /d/a/_temp/msys64/usr/bin
         cp /c/go-root/bin/go /d/a/_temp/msys64/usr/bin
+        ls -l /d/a/_temp/msys64/usr/bin/go
         /c/bin/qtsetup -test=false
 
     - name: Get dependencies
