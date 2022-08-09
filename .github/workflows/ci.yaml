@@ -135,7 +135,7 @@ jobs:
     - name: Test
       continue-on-error: true
       run: |
-        go test github.com/akiyosi/goneovim/editor
+        C:\go-root\bin\go test github.com/akiyosi/goneovim/editor
 
     - name: Archive
       shell: msys2 {0}
