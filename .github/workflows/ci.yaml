@@ -99,6 +99,7 @@ jobs:
 
     - name: Copy binary
       shell: msys2 {0}
+      run: |
         cp /c/bin/* /d/a/_temp/msys64/usr/bin
         cp /c/go-root/bin/go /d/a/_temp/msys64/usr/bin
 
