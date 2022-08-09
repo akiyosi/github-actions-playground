@@ -126,16 +126,16 @@ jobs:
         cd /c/src/github.com/akiyosi/goneovim/cmd/goneovim
         /c/bin/qtdeploy build desktop
 
-    # - name: Test
-    #   continue-on-error: true
-    #   shell: msys2 {0}
-    #   run: |
-    #     /c/go-root/bin/go test github.com/akiyosi/goneovim/editor
-
     - name: Test
       continue-on-error: true
+      shell: msys2 {0}
       run: |
-        C:\go-root\bin\go test github.com/akiyosi/goneovim/editor
+        /d/a/_temp/msys64/usr/bin/go test github.com/akiyosi/goneovim/editor
+
+    # - name: Test
+    #   continue-on-error: true
+    #   run: |
+    #     C:\go-root\bin\go test github.com/akiyosi/goneovim/editor
 
     - name: Archive
       shell: msys2 {0}
