@@ -1,10 +1,12 @@
 
 name: CI
+
 on: [push, pull_request]
+
 env:
   cache-version: v2
-jobs:
 
+jobs:
   build-windows:
     strategy:
       matrix:
@@ -54,7 +56,6 @@ jobs:
       run: | 
         curl -sL --retry 10 --retry-delay 60 -O https://github.com/akiyosi/github-actions-playground/releases/download/qt5-patched-qtbug-71737/qt-5.15.5_patched-qtbug71737.zip
         unzip qt-5.15.5_patched-qtbug71737.zip
-        ls -l qt5/
         cp -fpR qt5/* /mingw64/qt5-static/
         rm -fr qt5
         rm qt-5.15.5_patched-qtbug71737.zip
