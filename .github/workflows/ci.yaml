@@ -5,7 +5,7 @@ env:
   cache-version: v2
 jobs:
 
-  test-and-build-windows:
+  build-windows:
     strategy:
       matrix:
         platform: [windows-latest]
@@ -49,18 +49,6 @@ jobs:
         pacman -Scc
         pacman -Sc
 
-    # - name: check path
-    #   run: |
-    #     dir D:\a\_temp
-    #     dir D:\a\_temp\msys64
-    #     dir D:\a\_temp\msys64\mingw64
-    #     dir D:\a\_temp\msys64\mingw64\qt5-static\
-    #     dir D:\a\_temp\msys64\mingw64\qt5-static\bin
-    #     dir D:\a\_temp\msys64\mingw64\qt5-static\include
-    #     dir D:\a\_temp\msys64\mingw64\qt5-static\lib
-    #     dir D:\a\_temp\msys64\mingw64\qt5-static\plugins
-    #     dir D:\a\_temp\msys64\mingw64\qt5-static\share
-
     - name: Patch qt5
       shell: msys2 {0}
       run: | 
@@ -70,7 +58,6 @@ jobs:
         cp -fpR qt5/* /mingw64/qt5-static/
         rm -fr qt5
         rm qt-5.15.5_patched-qtbug71737.zip
-
 
     - name: Get Qt binding for Go
       run: |
@@ -83,12 +70,6 @@ jobs:
         fetch-depth: 0
         path: .\src\github.com\akiyosi\goneovim
 
-    # # FIXME: Should be fixed with the deprecation of set-env
-    # - name: Set PATH
-    #   run: |
-    #     $env:PATH = "D:\\a\\_temp\\msys64;C:\\bin;C:\\go-root\\bin;$env:PATH"
-    #     echo "::set-env name=PATH::$env:PATH"
-
     - uses: actions/cache@v2
       id: cache-qt-bindings-windows
       with:
@@ -97,17 +78,13 @@ jobs:
           !C:\src\github.com\therecipe\qt\.git
         key: ${{ matrix.qtversion }}-qtbindings-windows-${{ env.cache-version }}
 
-    - name: Copy binary
-      shell: msys2 {0}
-      run: |
-        cp /c/bin/* /d/a/_temp/msys64/usr/bin
-        cp /c/go-root/bin/go /d/a/_temp/msys64/usr/bin
-
     - name: Generate Qt bindings
       if: ${{ steps.cache-qt-bindings-windows.outputs.cache-hit != 'true' }}
       shell: msys2 {0}
       run: |
         export PATH=$PATH:/c/bin:/c/go-root/bin:/d/a/_temp/msys64/usr/bin
+        cp /c/bin/* /d/a/_temp/msys64/usr/bin
+        cp /c/go-root/bin/go /d/a/_temp/msys64/usr/bin
         /c/bin/qtsetup -test=false
 
     - name: Get dependencies
@@ -130,17 +107,12 @@ jobs:
         cd /c/src/github.com/akiyosi/goneovim/cmd/goneovim
         /c/bin/qtdeploy build desktop
 
-    - name: Test
-      continue-on-error: true
-      shell: msys2 {0}
-      run: |
-        export PATH=$PATH:/c/bin:/c/go-root/bin:/d/a/_temp/msys64/usr/bin
-        /d/a/_temp/msys64/usr/bin/go test github.com/akiyosi/goneovim/editor
-
+    # https://github.com/therecipe/qt/issues/657
     # - name: Test
     #   continue-on-error: true
+    #   shell: msys2 {0}
     #   run: |
-    #     C:\go-root\bin\go test github.com/akiyosi/goneovim/editor
+    #     /c/go-root/bin/go test github.com/akiyosi/goneovim/editor
 
     - name: Archive
       shell: msys2 {0}
