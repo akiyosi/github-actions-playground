@@ -116,19 +116,19 @@ jobs:
     - name: Download Source
       run: |
         dir
-        qt.bat download
+        .\qt.bat download
         
     - name: Setup Openssl
       run: |
-        qt.bat openssl
+        .\qt.bat openssl
 
     - name: Setup Qt
       run: |
-        qt.bat setup
+        .\qt.bat setup
 
     - name: Build Qt
       run: |
-        qt.bat build
+        .\qt.bat build
 
     - name: Uploads
       uses: actions/upload-artifact@v1
