@@ -7,98 +7,131 @@ env:
   qt_arch:   "win64_mingw81"
   
 jobs:
-  build-qt-windows:
+  # qt-for-mingw:
+  #   runs-on: windows-latest
+  #   steps:
+  #   
+  #   - name: Install correct version of Environment
+  #     run: |
+  #       choco uninstall mingw --force
+  #       #choco uninstall strawberryperl
+  #       #choco uninstall python
+  #       choco install mingw --x64 --version=8.1.0 
+  #       #choco install strawberryperl --version=5.26.3.1
+  #       #choco install python --version 3.6.2
+
+  #   - name: Download Source
+  #     shell: cmd
+  #     run: |
+  #       curl -L -o qt-everywhere-opensource-src-${{ env.qt_ver }}.zip https://download.qt.io/official_releases/qt/5.15/${{ env.qt_ver }}/single/qt-everywhere-opensource-src-${{ env.qt_ver }}.zip
+  #       7z x -y qt-everywhere-opensource-src-${{ env.qt_ver }}.zip -oC:\
+  #       rm qt-everywhere-opensource-src-${{ env.qt_ver }}.zip
+  #       mv C:\qt-everywhere-src-${{ env.qt_ver }} C:\qt5
+  #       dir C:\qt5
+
+  #   - name: Checkout code
+  #     uses: actions/checkout@v2
+  #     with:
+  #       repository: ''
+  #       fetch-depth: 0
+  #       path: .
+
+  #   - name: Apply patch
+  #     shell: cmd
+  #     run: |
+  #       dir .
+  #       cp -fp .\qfontdatabase.cpp C:\qt5\qtbase\src\gui\text\
+  #       dir C:\qt5
+
+
+# # ..\qt5\configure.bat -${{ env.qt_type }} -release -opensource -static -confirm-license -optimize-size -platform win32-g++ -prefix "D:\qt5" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -qt-doubleconversion -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -no-feature-geoservices_mapboxgl -make tools -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtgamepad -skip qtlottie  -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquicktimeline -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtspeech -skip qtquick3d -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebview -skip qtwebengine
+  #   - name: Build
+  #     run: |
+  #       mkdir C:\qt5_shadow
+  #       cd C:\qt5_shadow
+  #       ..\qt5\configure.bat -platform win32-g++ -prefix "D:\\qt5" -datadir "D:\\qt5\\share\\qt5" -archdatadir "D:\\qt5\\share\\qt5" -examplesdir "D:\\qt5\\share\\qt5\\examples" -testsdir "D:\\qt5\\share\\qt5\\tests" -opengl desktop -release -opensource -confirm-license -static -static-runtime -no-jasper -no-mng -D "JAS_DLL=0" -no-openssl -nomake tests -nomake examples -no-icu -no-fontconfig -schannel -dbus -qt-freetype -qt-pcre -qt-libpng -qt-libjpeg -qt-harfbuzz -qt-assimp -qt-doubleconversion -qt-tiff -qt-webp -no-iconv -no-gstreamer -no-wmf -feature-relocatable -no-sql-ibase -no-sql-mysql -no-sql-odbc -no-sql-psql -no-sql-sqlite2 -sql-sqlite -qt-sqlite -skip qttools -skip qtandroidextras -skip qtmacextras -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebview
+  #       mingw32-make -j2
+  #       mingw32-make install
+
+  #   - name: Check dir
+  #     env:
+  #       archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
+  #     shell: cmd
+  #     run: |
+  #       dir .
+  #       dir D:\qt5\
+
+  #   # - name: Check dir
+  #   #   env:
+  #   #     archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
+  #   #   shell: cmd
+  #   #   run: |
+  #   #     dir .
+  #   #     dir D:\qt5\
+  #   #     mkdir C:\qt5
+  #   #     type null > C:\qt5\hello.txt
+  #   #     7z a ${{env.archiveName}}.zip C:\qt5
+
+  #   - name: Package
+  #     env:
+  #       archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
+  #     run: |
+  #       7z a ${{env.archiveName}}.zip D:\qt5
+
+  #   - name: Remove current release
+  #     continue-on-error: true
+  #     env:
+  #       archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
+  #       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     run: |
+  #       gh release delete qt5-patched-qtbug-71737 --yes || true
+
+  #   - name: Overwrite tag
+  #     continue-on-error: true
+  #     env:
+  #       archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
+  #       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     run: |
+  #       git tag -d qt5-patched-qtbug-71737
+  #       git push origin :qt5-patched-qtbug-71737 || true
+
+  #   - name: Publish
+  #     env:
+  #       archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
+  #       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     run: |
+  #       gh release create qt5-patched-qtbug-71737 $PRERELEASE --title "qt5-patched-qtbug-71737" ${{env.archiveName}}.zip
+
+  qt-for-msvc-static:
     runs-on: windows-latest
     steps:
-    
-    - name: Install correct version of Environment
-      run: |
-        choco uninstall mingw --force
-        #choco uninstall strawberryperl
-        #choco uninstall python
-        choco install mingw --x64 --version=8.1.0 
-        #choco install strawberryperl --version=5.26.3.1
-        #choco install python --version 3.6.2
-
-    - name: Download Source
-      shell: cmd
-      run: |
-        curl -L -o qt-everywhere-opensource-src-${{ env.qt_ver }}.zip https://download.qt.io/official_releases/qt/5.15/${{ env.qt_ver }}/single/qt-everywhere-opensource-src-${{ env.qt_ver }}.zip
-        7z x -y qt-everywhere-opensource-src-${{ env.qt_ver }}.zip -oC:\
-        rm qt-everywhere-opensource-src-${{ env.qt_ver }}.zip
-        mv C:\qt-everywhere-src-${{ env.qt_ver }} C:\qt5
-        dir C:\qt5
 
     - name: Checkout code
       uses: actions/checkout@v2
       with:
-        repository: ''
+        repository: 'fpoussin/Qt5-MSVC-Static'
         fetch-depth: 0
         path: .
 
-    - name: Apply patch
-      shell: cmd
+    - name: Download Source
       run: |
-        dir .
-        cp -fp .\qfontdatabase.cpp C:\qt5\qtbase\src\gui\text\
-        dir C:\qt5
-
-
-# ..\qt5\configure.bat -${{ env.qt_type }} -release -opensource -static -confirm-license -optimize-size -platform win32-g++ -prefix "D:\qt5" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -qt-doubleconversion -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -no-feature-geoservices_mapboxgl -make tools -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtgamepad -skip qtlottie  -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquicktimeline -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtspeech -skip qtquick3d -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebview -skip qtwebengine
-    - name: Build
+        qt.bat download
+        
+    - name: Setup Openssl
       run: |
-        mkdir C:\qt5_shadow
-        cd C:\qt5_shadow
-        ..\qt5\configure.bat -platform win32-g++ -prefix "D:\\qt5" -datadir "D:\\qt5\\share\\qt5" -archdatadir "D:\\qt5\\share\\qt5" -examplesdir "D:\\qt5\\share\\qt5\\examples" -testsdir "D:\\qt5\\share\\qt5\\tests" -opengl desktop -release -opensource -confirm-license -static -static-runtime -no-jasper -no-mng -D "JAS_DLL=0" -no-openssl -nomake tests -nomake examples -no-icu -no-fontconfig -schannel -dbus -qt-freetype -qt-pcre -qt-libpng -qt-libjpeg -qt-harfbuzz -qt-assimp -qt-doubleconversion -qt-tiff -qt-webp -no-iconv -no-gstreamer -no-wmf -feature-relocatable -no-sql-ibase -no-sql-mysql -no-sql-odbc -no-sql-psql -no-sql-sqlite2 -sql-sqlite -qt-sqlite -skip qttools -skip qtandroidextras -skip qtmacextras -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebview
-        mingw32-make -j2
-        mingw32-make install
+        qt.bat openssl
 
-    - name: Check dir
-      env:
-        archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
-      shell: cmd
+    - name: Setup Qt
       run: |
-        dir .
-        dir D:\qt5\
+        qt.bat setup
 
-    # - name: Check dir
-    #   env:
-    #     archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
-    #   shell: cmd
-    #   run: |
-    #     dir .
-    #     dir D:\qt5\
-    #     mkdir C:\qt5
-    #     type null > C:\qt5\hello.txt
-    #     7z a ${{env.archiveName}}.zip C:\qt5
-
-    - name: Package
-      env:
-        archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
+    - name: Build Qt
       run: |
-        7z a ${{env.archiveName}}.zip D:\qt5
+        qt.bat build
 
-    - name: Remove current release
-      continue-on-error: true
-      env:
-        archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        gh release delete qt5-patched-qtbug-71737 --yes || true
-
-    - name: Overwrite tag
-      continue-on-error: true
-      env:
-        archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        git tag -d qt5-patched-qtbug-71737
-        git push origin :qt5-patched-qtbug-71737 || true
-
-    - name: Publish
-      env:
-        archiveName: qt-${{ env.qt_ver }}_patched-qtbug71737
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        gh release create qt5-patched-qtbug-71737 $PRERELEASE --title "qt5-patched-qtbug-71737" ${{env.archiveName}}.zip
+    - name: Uploads
+      uses: actions/upload-artifact@v1
+      with:
+        name: qt5-msvc-static
+        path: ${{ github.workspace }}/build
 
