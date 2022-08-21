@@ -109,7 +109,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
       with:
-        repository: 'fpoussin/Qt5-MSVC-Static'
+        repository: 'akiyosi/Qt5-MSVC-Static'
         fetch-depth: 0
         path: .
 
