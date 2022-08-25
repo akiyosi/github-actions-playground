@@ -143,7 +143,8 @@ jobs:
     - name: Package binaries
       run: |
         # Create archive of the pre-built Qt binaries
-        7z a qt5_static_binaries_win.zip D:\qt5
+        # 7z a qt5_static_binaries_win.zip D:\qt5
+        7z a qt5_static_binaries_win.zip ..\Qt5_binaries
     - uses: actions/upload-artifact@v1
       with:
         name: qt5_static_binaries_win.zip
