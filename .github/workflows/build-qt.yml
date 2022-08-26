@@ -124,7 +124,7 @@ jobs:
       run: |
         # Clone Qt5 repo
         cd ..
-        git clone https://code.qt.io/qt/qt5.git -b 5.15.10
+        git clone https://code.qt.io/qt/qt5.git -b 5.15.3
         cd qt5
         # perl init-repository -f --module-subset=qtbase,qtcharts,qtsvg,qt3d
         perl init-repository -f --module-subset=all
