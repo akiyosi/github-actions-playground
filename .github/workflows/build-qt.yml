@@ -123,7 +123,7 @@ jobs:
     - name: Compile static Qt version
       run: |
         # Clone Qt5 repo
-        cd ..
+        cd C:\\
         git clone https://code.qt.io/qt/qt5.git -b 5.15.2
         cd qt5
         # perl init-repository -f --module-subset=qtbase,qtcharts,qtsvg,qt3d
@@ -139,14 +139,14 @@ jobs:
         # Configure Qt5
         # ..\qt5\configure.bat -developer-build -release -static -no-pch -optimize-size -opengl desktop -platform win32-msvc -prefix "..\Qt5_binaries" -skip webengine -nomake tools -nomake tests -nomake examples -opensource -confirm-license
         # ..\qt5\configure.bat -release -static -no-pch -optimize-size -opengl desktop -platform win32-msvc -prefix "..\Qt5_binaries" -skip webengine -nomake tools -nomake tests -nomake examples -opensource -confirm-license
-        ..\qt5\configure.bat -release -opensource -static -confirm-license -optimize-size -platform win32-msvc -prefix "C:\\qt5" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -qt-doubleconversion -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -no-feature-geoservices_mapboxgl -make tools
+        ..\qt5\configure.bat -release -opensource -static -confirm-license -optimize-size -platform win32-msvc -prefix "C:\\qt5-bin" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -qt-doubleconversion -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -no-feature-geoservices_mapboxgl -make tools
         jom -j4
         nmake install
     - name: Package binaries
       run: |
         # Create archive of the pre-built Qt binaries
         # 7z a qt5_static_binaries_win.zip D:\qt5
-        7z a qt5_static_binaries_win.zip C:\qt5
+        7z a qt5_static_binaries_win.zip C:\qt5-bin
     - uses: actions/upload-artifact@v1
       with:
         name: qt5_static_binaries_win.zip
