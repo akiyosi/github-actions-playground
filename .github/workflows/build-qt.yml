@@ -140,7 +140,7 @@ jobs:
         # ..\qt5\configure.bat -developer-build -release -static -no-pch -optimize-size -opengl desktop -platform win32-msvc -prefix "..\Qt5_binaries" -skip webengine -nomake tools -nomake tests -nomake examples -opensource -confirm-license
         # ..\qt5\configure.bat -release -static -no-pch -optimize-size -opengl desktop -platform win32-msvc -prefix "..\Qt5_binaries" -skip webengine -nomake tools -nomake tests -nomake examples -opensource -confirm-license
         #..\qt5\configure.bat -release -opensource -static -static-runtime -confirm-license -optimize-size -platform win32-msvc -prefix "C:\\qt5-bin" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -make tools -make libs -skip webengine
-        ..\qt5\configure.bat -release -opensource -share  -confirm-license -optimize-size -platform win32-msvc -prefix "C:\\qt5-bin" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -make tools -make libs -skip webengine
+        ..\qt5\configure.bat -release -opensource -shared -confirm-license -optimize-size -platform win32-msvc -prefix "C:\\qt5-bin" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -make tools -make libs -skip webengine
         jom -j4
         nmake install
     - name: Package binaries
