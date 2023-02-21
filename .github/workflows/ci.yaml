@@ -32,9 +32,9 @@ jobs:
       with:
         go-version: ${{ matrix.go-version }}
 
-    - name: Setup xcode
-      run: |
-        xcode-select --install
+    # - name: Setup xcode
+    #   run: |
+    #     xcode-select --install
 
     - name: Install Qt for macOS
       run: |
