@@ -3,7 +3,7 @@ name: build-qt
 on: [push]
 
 env: 
-  qt_ver:    "5.15.9"
+  qt_ver:    "5.15.8"
   qt_arch:   "win64_mingw81"
   
 jobs:
@@ -289,9 +289,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release delete qt-${{ env.qt_ver }} --yes || true
-          git push origin qt-${{ env.qt_ver }} || true
-          gh release create qt-${{ env.qt_ver }} --title qt-${{ env.qt_ver }} /home/runner/work/github-actions-playground/github-actions-playground/plain/* /home/runner/work/github-actions-playground/github-actions-playground/patched/* /home/runner/work/github-actions-playground/github-actions-playground/directwrite/*
+          gh release delete qt_${{ env.qt_ver }} --yes || true
+          git push origin qt_${{ env.qt_ver }} || true
+          gh release create qt_${{ env.qt_ver }} --title qt-${{ env.qt_ver }} /home/runner/work/github-actions-playground/github-actions-playground/plain/* /home/runner/work/github-actions-playground/github-actions-playground/patched/* /home/runner/work/github-actions-playground/github-actions-playground/directwrite/*
 
 
 
