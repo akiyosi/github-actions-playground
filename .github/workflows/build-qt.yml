@@ -3,7 +3,7 @@ name: build-qt
 on: [push]
 
 env: 
-  qt_ver:    "5.15.9"
+  qt_ver:    "5.15.8"
   qt_arch:   "win64_mingw81"
   
 jobs:
@@ -22,12 +22,6 @@ jobs:
 
     - name: Check PATH
       run: |
-        dir "C:\\Program Files (x86)\\Windows Kits"
-        dir "C:\\Program Files (x86)\\Windows Kits\\8.1"
-        dir "C:\\Program Files (x86)\\Windows Kits\\8.1\\bin"
-        dir "C:\\Program Files (x86)\\Windows Kits\\10\\bin"
-        dir "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0"
-        dir "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0\\x86"
         Copy-Item "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0\\x86\\fxc.exe" -destination "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\x86\\"
         echo "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\x86" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
@@ -128,11 +122,6 @@ jobs:
 
     - name: Check PATH
       run: |
-        dir "C:\\Program Files (x86)\\Windows Kits"
-        dir "C:\\Program Files (x86)\\Windows Kits\\8.1"
-        dir "C:\\Program Files (x86)\\Windows Kits\\10\\bin"
-        dir "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0"
-        dir "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0\\x86"
         Copy-Item "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0\\x86\\fxc.exe" -destination "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\x86\\"
         echo "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\x86" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
@@ -215,6 +204,92 @@ jobs:
     #     gh release create qt-${{ env.qt_ver }} $PRERELEASE --title qt-${{ env.qt_ver }} ${{env.archiveName}}.zip
 
 
+
+  publish:
+    needs: [qt-for-mingw, qt-for-mingw-directwrite]
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gettext-base
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete qt_${{ env.qt_ver }} --yes || true
+          git push origin qt_${{ env.qt_ver }} || true
+          gh release create qt_${{ env.qt_ver }} --title qt-${{ env.qt_ver }} /home/runner/work/github-actions-playground/github-actions-playground/plain/* /home/runner/work/github-actions-playground/github-actions-playground/patched/* /home/runner/work/github-actions-playground/github-actions-playground/directwrite/*
+
+
+
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+ 
+  qt-for-msvc-static:
+    if: ${{ false }}
+    runs-on: windows-2019
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v2
+    - name: Install Python 3.7 version
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+        architecture: 'x64'
+    - name: Install jom
+      run: |
+        Invoke-WebRequest https://www.dropbox.com/s/gbf8sdx8wqxcrnd/jom.zip?dl=1 -OutFile .\jom.zip
+        expand-archive -path "jom.zip"
+        dir D:\\a\\github-actions-playground\\
+        echo "D:\\a\\github-actions-playground\\github-actions-playground\\jom" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+    - name: Compile static Qt version
+      run: |
+        # Clone Qt5 repo
+        cd C:\\
+        git clone https://code.qt.io/qt/qt5.git -b 5.14.1
+        cd qt5
+        # perl init-repository -f --module-subset=qtbase,qtcharts,qtsvg,qt3d
+        perl init-repository -f --module-subset=all
+        # perl init-repository -f --module-subset=qtbase,qtdeclarative,qtcharts,qtdatavis3d,qtpurchasing,qtvirtualkeyboard,qtnetworkauth,qtwebglplugin,qtscript,qtmultimedia,qttools,qtremoteobjects
+        # Create shadow build folder
+        cd ..
+        mkdir qt5_shadow
+        cd qt5_shadow
+        # Setup the compiler 
+        cmd.exe /c "call `"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat`" && set > %temp%\vcvars.txt"
+        Get-Content "$env:temp\vcvars.txt" | Foreach-Object { if ($_ -match "^(.*?)=(.*)$") { Set-Content "env:\$($matches[1])" $matches[2] } }
+        # Configure Qt5
+        # ..\qt5\configure.bat -developer-build -release -static -no-pch -optimize-size -opengl desktop -platform win32-msvc -prefix "..\Qt5_binaries" -skip webengine -nomake tools -nomake tests -nomake examples -opensource -confirm-license
+        # ..\qt5\configure.bat -release -static -no-pch -optimize-size -opengl desktop -platform win32-msvc -prefix "..\Qt5_binaries" -skip webengine -nomake tools -nomake tests -nomake examples -opensource -confirm-license
+        #..\qt5\configure.bat -release -opensource -static -static-runtime -confirm-license -optimize-size -platform win32-msvc -prefix "C:\\qt5-bin" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -make tools -make libs -skip webengine
+        #..\qt5\configure.bat -release -opensource -shared -confirm-license -optimize-size -platform win32-msvc -prefix "C:\\qt5-bin" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -make tools -make libs -skip webengine
+        ..\qt5\configure.bat -developer-build -opensource -static -confirm-license -optimize-size -platform win32-msvc -prefix "C:\\qt5-bin" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -make tools -make libs -skip webengine
+        jom -j4
+        nmake install
+    - name: Package binaries
+      run: |
+        # Create archive of the pre-built Qt binaries
+        # 7z a qt5_static_binaries_win.zip D:\qt5
+        7z a qt5_static_binaries_win.zip C:\qt5-bin
+    - uses: actions/upload-artifact@v1
+      with:
+        name: qt5_static_binaries_win.zip
+        path: qt5_static_binaries_win.zip
+ 
+ 
+ 
   qt-for-mingw-patched:
     if: ${{ false }}
     runs-on: windows-latest
@@ -326,90 +401,3 @@ jobs:
     #     gh release create qt5-patched-qtbug-71737 $PRERELEASE --title "qt5-patched-qtbug-71737" ${{env.archiveName}}.zip
 
 
-
-
-  publish:
-    needs: [qt-for-mingw, qt-for-mingw-directwrite]
-    runs-on: ubuntu-20.04
-    permissions:
-      contents: write
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/download-artifact@v2
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gettext-base
-
-      - name: Publish
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release delete qt-${{ env.qt_ver }} --yes || true
-          git push origin qt-${{ env.qt_ver }} || true
-          gh release create qt-${{ env.qt_ver }} --title qt-${{ env.qt_ver }} /home/runner/work/github-actions-playground/github-actions-playground/plain/* /home/runner/work/github-actions-playground/github-actions-playground/patched/* /home/runner/work/github-actions-playground/github-actions-playground/directwrite/*
-
-
-
-####################################################################################################################
-####################################################################################################################
-####################################################################################################################
-####################################################################################################################
-####################################################################################################################
- 
-  qt-for-msvc-static:
-    if: ${{ false }}
-    runs-on: windows-2019
-    steps:
-    - name: Clone repository
-      uses: actions/checkout@v2
-    - name: Install Python 3.7 version
-      uses: actions/setup-python@v1
-      with:
-        python-version: '3.7'
-        architecture: 'x64'
-    - name: Install jom
-      run: |
-        Invoke-WebRequest https://www.dropbox.com/s/gbf8sdx8wqxcrnd/jom.zip?dl=1 -OutFile .\jom.zip
-        expand-archive -path "jom.zip"
-        dir D:\\a\\github-actions-playground\\
-        echo "D:\\a\\github-actions-playground\\github-actions-playground\\jom" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-    - name: Compile static Qt version
-      run: |
-        # Clone Qt5 repo
-        cd C:\\
-        git clone https://code.qt.io/qt/qt5.git -b 5.14.1
-        cd qt5
-        # perl init-repository -f --module-subset=qtbase,qtcharts,qtsvg,qt3d
-        perl init-repository -f --module-subset=all
-        # perl init-repository -f --module-subset=qtbase,qtdeclarative,qtcharts,qtdatavis3d,qtpurchasing,qtvirtualkeyboard,qtnetworkauth,qtwebglplugin,qtscript,qtmultimedia,qttools,qtremoteobjects
-        # Create shadow build folder
-        cd ..
-        mkdir qt5_shadow
-        cd qt5_shadow
-        # Setup the compiler 
-        cmd.exe /c "call `"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat`" && set > %temp%\vcvars.txt"
-        Get-Content "$env:temp\vcvars.txt" | Foreach-Object { if ($_ -match "^(.*?)=(.*)$") { Set-Content "env:\$($matches[1])" $matches[2] } }
-        # Configure Qt5
-        # ..\qt5\configure.bat -developer-build -release -static -no-pch -optimize-size -opengl desktop -platform win32-msvc -prefix "..\Qt5_binaries" -skip webengine -nomake tools -nomake tests -nomake examples -opensource -confirm-license
-        # ..\qt5\configure.bat -release -static -no-pch -optimize-size -opengl desktop -platform win32-msvc -prefix "..\Qt5_binaries" -skip webengine -nomake tools -nomake tests -nomake examples -opensource -confirm-license
-        #..\qt5\configure.bat -release -opensource -static -static-runtime -confirm-license -optimize-size -platform win32-msvc -prefix "C:\\qt5-bin" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -make tools -make libs -skip webengine
-        #..\qt5\configure.bat -release -opensource -shared -confirm-license -optimize-size -platform win32-msvc -prefix "C:\\qt5-bin" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -make tools -make libs -skip webengine
-        ..\qt5\configure.bat -developer-build -opensource -static -confirm-license -optimize-size -platform win32-msvc -prefix "C:\\qt5-bin" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -make tools -make libs -skip webengine
-        jom -j4
-        nmake install
-    - name: Package binaries
-      run: |
-        # Create archive of the pre-built Qt binaries
-        # 7z a qt5_static_binaries_win.zip D:\qt5
-        7z a qt5_static_binaries_win.zip C:\qt5-bin
-    - uses: actions/upload-artifact@v1
-      with:
-        name: qt5_static_binaries_win.zip
-        path: qt5_static_binaries_win.zip
- 
- 
- 
