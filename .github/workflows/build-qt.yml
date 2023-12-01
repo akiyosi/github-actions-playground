@@ -3,7 +3,7 @@ name: build-qt
 on: [push]
 
 env: 
-  qt_ver:    "5.15.8"
+  qt_ver:    "5.15.9"
   qt_arch:   "win64_mingw81"
   
 jobs:
@@ -41,14 +41,14 @@ jobs:
         fetch-depth: 0
         path: .
 
-    - name: Patch
-      run: |
-        cd C:\qt5
-        $ch1="defined(Q_CC_MINGW) && WINVER < 0x0602"
-        $rep1="defined(Q_CC_MINGW) && WINVER < 0x0602 && !(_WIN32_WINNT >= _WIN32_WINNT_WIN8)"
-        $data=Get-Content  .\qtbase\src\corelib\io\qfilesystemengine_win.cpp | % { $_ -replace [regex]::Escape($ch1), $rep1 }
-        $data | Out-File   .\qtbase\src\corelib\io\qfilesystemengine_win.cpp -Encoding UTF8
-        (Get-Content qtbase\src\corelib\io\qfilesystemengine_win.cpp)[650..670]
+    # - name: Patch
+    #   run: |
+    #     cd C:\qt5
+    #     $ch1="defined(Q_CC_MINGW) && WINVER < 0x0602"
+    #     $rep1="defined(Q_CC_MINGW) && WINVER < 0x0602 && !(_WIN32_WINNT >= _WIN32_WINNT_WIN8)"
+    #     $data=Get-Content  .\qtbase\src\corelib\io\qfilesystemengine_win.cpp | % { $_ -replace [regex]::Escape($ch1), $rep1 }
+    #     $data | Out-File   .\qtbase\src\corelib\io\qfilesystemengine_win.cpp -Encoding UTF8
+    #     (Get-Content qtbase\src\corelib\io\qfilesystemengine_win.cpp)[650..670]
 
      # ..\qt5\configure.bat -${{ env.qt_type }} -release -opensource -static -confirm-license -optimize-size -platform win32-g++ -prefix "D:\qt5" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -qt-doubleconversion -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -no-feature-geoservices_mapboxgl -make tools -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtgamepad -skip qtlottie  -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquicktimeline -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtspeech -skip qtquick3d -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebview -skip qtwebengine
     - name: Build
@@ -141,14 +141,14 @@ jobs:
         fetch-depth: 0
         path: .
 
-    - name: Patch
-      run: |
-        cd C:\qt5
-        $ch1="defined(Q_CC_MINGW) && WINVER < 0x0602"
-        $rep1="defined(Q_CC_MINGW) && WINVER < 0x0602 && !(_WIN32_WINNT >= _WIN32_WINNT_WIN8)"
-        $data=Get-Content  .\qtbase\src\corelib\io\qfilesystemengine_win.cpp | % { $_ -replace [regex]::Escape($ch1), $rep1 }
-        $data | Out-File   .\qtbase\src\corelib\io\qfilesystemengine_win.cpp -Encoding UTF8
-        (Get-Content qtbase\src\corelib\io\qfilesystemengine_win.cpp)[650..670]
+    # - name: Patch
+    #   run: |
+    #     cd C:\qt5
+    #     $ch1="defined(Q_CC_MINGW) && WINVER < 0x0602"
+    #     $rep1="defined(Q_CC_MINGW) && WINVER < 0x0602 && !(_WIN32_WINNT >= _WIN32_WINNT_WIN8)"
+    #     $data=Get-Content  .\qtbase\src\corelib\io\qfilesystemengine_win.cpp | % { $_ -replace [regex]::Escape($ch1), $rep1 }
+    #     $data | Out-File   .\qtbase\src\corelib\io\qfilesystemengine_win.cpp -Encoding UTF8
+    #     (Get-Content qtbase\src\corelib\io\qfilesystemengine_win.cpp)[650..670]
 
      # ..\qt5\configure.bat -${{ env.qt_type }} -release -opensource -static -confirm-license -optimize-size -platform win32-g++ -prefix "D:\qt5" -qt-sqlite -qt-pcre -qt-zlib -qt-libpng -qt-libjpeg -qt-doubleconversion -opengl desktop -no-openssl -ssl -schannel -nomake tests -nomake examples -no-compile-examples -no-feature-geoservices_mapboxgl -make tools -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtgamepad -skip qtlottie  -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquicktimeline -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtspeech -skip qtquick3d -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebview -skip qtwebengine
     - name: Build
@@ -225,9 +225,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release delete qt_${{ env.qt_ver }} --yes || true
-          git push origin qt_${{ env.qt_ver }} || true
-          gh release create qt_${{ env.qt_ver }} --title qt-${{ env.qt_ver }} /home/runner/work/github-actions-playground/github-actions-playground/plain/* /home/runner/work/github-actions-playground/github-actions-playground/patched/* /home/runner/work/github-actions-playground/github-actions-playground/directwrite/*
+          gh release delete qt-${{ env.qt_ver }} --yes || true
+          git push origin qt-${{ env.qt_ver }} || true
+          gh release create qt-${{ env.qt_ver }} --title qt-${{ env.qt_ver }} /home/runner/work/github-actions-playground/github-actions-playground/plain/* /home/runner/work/github-actions-playground/github-actions-playground/patched/* /home/runner/work/github-actions-playground/github-actions-playground/directwrite/*
 
 
 
